@@ -1,7 +1,7 @@
 import { make } from "./mod.ts"
 import { expandGlob } from "https://deno.land/std@0.204.0/fs/mod.ts"
 import * as JSONC from "https://deno.land/std@0.203.0/jsonc/mod.ts"
-import { expect } from "https://esm.sh/chai@4.3.10"
+import { expect } from "https://esm.sh/chai@4.3.10?pin=v133"
 
 for await (const { path, name: _name } of expandGlob("tests/*.jsonc")) {
   const name = _name.replace(".jsonc", "").replaceAll("_", " ")

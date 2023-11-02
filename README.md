@@ -5,6 +5,8 @@ the [deno](https://deno.land) task runner.
 
 You can assign default permissions and flags to deno subcommands, environment variables, assign descriptions and more.
 
+![deno make](/demo.png)
+
 ## 💭 Why ?
 
 While the default [deno task runner](https://docs.deno.com/runtime/manual/tools/task_runner) is great, it is not always
