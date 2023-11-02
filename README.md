@@ -66,7 +66,7 @@ runner, in addition to providing a few extra features.
         "BAR": "bar" // ➡️ Set BAR environment variable to "bar"
       }
     },
-    // Write "multi-line" tasks using arrays (they will be joined with "\n")
+    // Write "multi-line" tasks using arrays (they will be joined with spaces)
     "test": {
       "description": "🧪 Run tests and print collected coverage",
       "task": [
