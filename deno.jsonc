@@ -9,7 +9,7 @@
         "rm -rf .coverage &&",
         "deno test &&",
         "deno coverage .coverage &&",
-        "rm -rf tests/.coverage tests/.coverage.report tests/.deno.lock tests/.junit.xml tests/.mod.bin tests/.mod.bin.exe tests/*.exe"
+        "rm -rf tests/.[!.]* tests/*.exe"
       ],
       "deno": {
         "test": {
