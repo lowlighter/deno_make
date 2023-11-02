@@ -11,8 +11,20 @@ for await (const { path, name: _name } of expandGlob("tests/*.jsonc")) {
       continue
     }
     Deno.test(`${name}: ${task}`, async () => {
-      const { code } = await make({ task, config: path, log: () => null, exit: false, stdio: "null" })
-      expect(code).to.equal(0)
+      const stdio = [] as string[]
+      const { code } = await make({
+        task,
+        config: path,
+        log: (message) => stdio.push(message),
+        exit: false,
+        stdio: "null",
+      })
+      try {
+        expect(code).to.equal(0)
+      } catch (error) {
+        console.log(...stdio)
+        throw error
+      }
     })
   }
 }

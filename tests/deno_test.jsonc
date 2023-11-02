@@ -4,20 +4,15 @@
   },
   "+tasks": {
     "flags:none": {
-      "task": "deno test tests/mod_test.ts"
+      "task": "deno test mod_test.ts",
+      "cwd": "tests"
     },
-    "flags:doc": {
-      "task": "deno test tests/mod_test.ts",
+    "flags:boolean_true": {
+      "task": "deno test mod_test.ts",
+      "cwd": "tests",
       "deno": {
         "test": {
-          "doc": true
-        }
-      }
-    },
-    "flags:execution_1": {
-      "task": "deno test tests/mod_test.ts",
-      "deno": {
-        "test": {
+          "doc": true,
           "traceOps": true,
           "failFast": true,
           "shuffle": true,
@@ -27,10 +22,12 @@
         }
       }
     },
-    "flags:execution_2": {
-      "task": "deno test tests/mod_test.ts",
+    "flags:boolean_false": {
+      "task": "deno test mod_test.ts",
+      "cwd": "tests",
       "deno": {
         "test": {
+          "doc": false,
           "traceOps": false,
           "failFast": false,
           "shuffle": false,
@@ -40,8 +37,9 @@
         }
       }
     },
-    "flags:execution_number": {
-      "task": "deno test tests/mod_test.ts",
+    "flags:number": {
+      "task": "deno test mod_test.ts",
+      "cwd": "tests",
       "deno": {
         "test": {
           "failFast": 1,
@@ -49,37 +47,33 @@
         }
       }
     },
-    "flags:reporter": {
+    "flags:string": {
       "task": "deno test tests/mod_test.ts",
+      "cwd": "tests",
       "deno": {
         "test": {
-          "coverage": "tests/.coverage",
+          "coverage": ".coverage",
           "reporter": "junit",
+          "filter": "junit",
           "junitPath": "tests/.junit.xml"
         }
       }
     },
-    "flags:ignore_1": {
+    "flags:array": {
       "task": "deno test tests/mod_test.ts",
+      "cwd": "tests",
       "deno": {
         "test": {
           "ignore": ["*_test.ts"]
         }
       }
     },
-    "flags:ignore_2": {
+    "flags:array_empty": {
       "task": "deno test tests/mod_test.ts",
+      "cwd": "tests",
       "deno": {
         "test": {
           "ignore": []
-        }
-      }
-    },
-    "flags:filter": {
-      "task": "deno test tests/mod_test.ts",
-      "deno": {
-        "test": {
-          "filter": "dummy"
         }
       }
     }

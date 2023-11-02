@@ -1,5 +1,3 @@
 .coverage
 .deno-make.json
-tests/.coverage
-tests/.coverage.report
-tests/.junit.xml
+tests/.*

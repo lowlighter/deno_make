@@ -8,7 +8,8 @@
       "task": [
         "rm -rf .coverage &&",
         "deno test &&",
-        "deno coverage .coverage"
+        "deno coverage .coverage &&",
+        "rm -rf tests/.coverage tests/.coverage.report tests/.deno.lock tests/.junit.xml"
       ],
       "deno": {
         "test": {
@@ -41,13 +42,3 @@
     "exclude": [".coverage", ".deno-make.json"]
   }
 }
-/*
-bench
-bundle
-compile
-_eval
-fmt
-install
-uninstall
-repl
-*/

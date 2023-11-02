@@ -4,10 +4,30 @@
   },
   "+tasks": {
     "flags:none": {
-      "task": "deno coverage tests/.coverage"
+      "task": "deno coverage .coverage",
+      "cwd": "tests"
     },
-    "flags:filters": {
-      "task": "deno coverage tests/.coverage",
+    "flags:boolean_true": {
+      "task": "deno coverage .coverage",
+      "cwd": "tests",
+      "deno": {
+        "coverage": {
+          "lcov": true
+        }
+      }
+    },
+    "flags:boolean_false": {
+      "task": "deno coverage .coverage",
+      "cwd": "tests",
+      "deno": {
+        "coverage": {
+          "lcov": false
+        }
+      }
+    },
+    "flags:string": {
+      "task": "deno coverage .coverage",
+      "cwd": "tests",
       "deno": {
         "coverage": {
           "include": "^file:",
@@ -15,12 +35,31 @@
         }
       }
     },
+    "flags:array": {
+      "task": "deno coverage .coverage",
+      "cwd": "tests",
+      "deno": {
+        "coverage": {
+          "ignore": ["foo"]
+        }
+      }
+    },
+    "flags:array_empty": {
+      "task": "deno coverage .coverage",
+      "cwd": "tests",
+      "deno": {
+        "coverage": {
+          "ignore": []
+        }
+      }
+    },
     "flags:lcov": {
-      "task": "deno coverage tests/.coverage",
+      "task": "deno coverage .coverage",
+      "cwd": "tests",
       "deno": {
         "coverage": {
           "lcov": true,
-          "output": "tests/.coverage.report"
+          "output": ".coverage.report"
         }
       }
     }

@@ -4,29 +4,24 @@
   },
   "+tasks": {
     "flags:none": {
-      "task": "deno info"
-    },
-    "flags:lock_1": {
       "task": "deno info",
+      "cwd": "tests"
+    },
+    "flags:boolean_true": {
+      "task": "deno info",
+      "cwd": "tests",
       "deno": {
         "info": {
-          "lock": true
+          "json": true
         }
       }
     },
-    "flags:lock_2": {
+    "flags:boolean_false": {
       "task": "deno info",
+      "cwd": "tests",
       "deno": {
         "info": {
-          "lock": false
-        }
-      }
-    },
-    "flags:lock_3": {
-      "task": "deno info",
-      "deno": {
-        "info": {
-          "lock": "deno.lock"
+          "json": false
         }
       }
     }

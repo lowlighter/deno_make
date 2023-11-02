@@ -23,8 +23,8 @@ const runnable = is.object({
   location: is.string().optional().transform((v) => v ? `--location='${v}'` : ""),
   seed: is.number().optional().transform((v) => typeof v === "number" ? `--seed=${v}` : ""),
   v8Flags: is.array(is.string()).optional().transform((v) => v?.length ? `--v8-flags='${v.join(",")}'` : ""),
-  ignoreCertificateErrors: is.boolean().optional().transform((v) =>
-    v === true ? "--unsafely-ignore-certificate-errors" : ""
+  certificateErrors: is.boolean().optional().transform((v) =>
+    v === false ? "--unsafely-ignore-certificate-errors" : ""
   ),
 })
 
@@ -120,9 +120,7 @@ const _modules = is.object({
   npm: is.boolean().optional().transform((v) => v === false ? "--no-npm" : ""),
   check: is.union([
     is.boolean().transform((v) => v ? "--check=all" : "--no-check"),
-    is.object({
-      remote: is.boolean().transform((v) => v ? "--check=all" : "--check=all --no-check=remote"),
-    }).transform((v) => Object.values(v).filter(Boolean).join(" ")),
+    is.string().min(1).transform((v) => `--check=${v}`),
   ]).optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
   reload: is.union([
     is.boolean().transform((v) => v ? "--reload" : ""),
@@ -135,7 +133,14 @@ const _modules = is.object({
 /** Module flags */
 const modules = {
   all: _modules.optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
-  nocache: _modules.pick({ check: true, reload: true, npm: true, remote: true, node_modules: true, vendor: true })
+  nocache: _modules.pick({
+    check: true,
+    reload: true,
+    npm: true,
+    remote: true,
+    node_modules: true,
+    vendor: true,
+  })
     .optional()
     .transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
   vendor: _modules.pick({
@@ -143,10 +148,15 @@ const modules = {
     node_modules: true,
     vendor: true,
   }).optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
-  doc: _modules.pick({ reload: true, npm: true, remote: true }).optional().transform((v) =>
-    Object.values(v ?? {}).filter(Boolean).join(" ")
-  ),
-  nocheck: _modules.pick({ reload: true, npm: true, remote: true, node_modules: true, vendor: true }).optional()
+  doc: _modules.pick({ reload: true, npm: true, remote: true }).optional()
+    .transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
+  nocheck: _modules.pick({
+    reload: true,
+    npm: true,
+    remote: true,
+    node_modules: true,
+    vendor: true,
+  }).optional()
     .transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
 }
 
@@ -154,9 +164,9 @@ const modules = {
 const inspect = is.union([
   is.string().transform((v) => v ? `--inspect='${v}'` : ""),
   is.object({
-    listen: is.string().transform((v) => v ? `--inspect='${v}'` : ""),
-    break: is.string().transform((v) => v ? `--inspect-brk='${v}'` : ""),
-    wait: is.string().transform((v) => v.length ? `--inspect-wait='${v}'` : ""),
+    listen: is.string().min(1).optional().transform((v) => v ? `--inspect='${v}'` : ""),
+    break: is.string().min(1).optional().transform((v) => v ? `--inspect-brk='${v}'` : ""),
+    wait: is.string().min(1).optional().transform((v) => v ? `--inspect-wait='${v}'` : ""),
   }),
 ]).optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" "))
 
@@ -218,14 +228,17 @@ const coverage = common.pick({ unstable: true, quiet: true }).extend({
   output: is.string().optional().transform((v) => v ? `--output='${v}'` : ""),
 }).transform((v) => Object.values(v).filter(Boolean).join(" "))
 
-const doc = common.pick({ unstable: true, quiet: true, importMap: true }).extend({
-  lock: lock.read,
-  modules: modules.doc,
-  private: is.boolean().optional().transform((v) => v ? "--private" : ""),
-  json: is.boolean().optional().transform((v) => v ? "--json" : ""),
-}).transform((v) => Object.values(v).filter(Boolean).join(" "))
+const doc = common.pick({ unstable: true, quiet: true, importMap: true })
+  .extend({
+    lock: lock.read,
+    modules: modules.doc,
+    private: is.boolean().optional().transform((v) => v ? "--private" : ""),
+    json: is.boolean().optional().transform((v) => v ? "--json" : ""),
+  }).transform((v) => Object.values(v).filter(Boolean).join(" "))
 
-const _eval = common.merge(runnable.pick({ location: true, v8Flags: true, seed: true })).extend({
+const _eval = common.merge(
+  runnable.pick({ location: true, v8Flags: true, seed: true }),
+).extend({
   lock: lock.write,
   modules: modules.all,
   inspect,
@@ -260,10 +273,6 @@ const install = common.merge(runnable).extend({
   root: is.string().optional().transform((v) => v ? `--root='${v}'` : ""),
   name: is.string().optional().transform((v) => v ? `--name='${v}'` : ""),
   force: is.boolean().optional().transform((v) => v ? "--force" : ""),
-}).transform((v) => Object.values(v).filter(Boolean).join(" "))
-
-const uninstall = common.pick({ quiet: true, unstable: true }).extend({
-  root: is.string().optional().transform((v) => v ? `--root='${v}'` : ""),
 }).transform((v) => Object.values(v).filter(Boolean).join(" "))
 
 const lint = common.pick({ config: true, unstable: true, quiet: true }).extend({
@@ -326,6 +335,10 @@ const types = common.pick({
   quiet: true,
 }).transform((v) => Object.values(v).filter(Boolean).join(" "))
 
+const uninstall = common.pick({ quiet: true, unstable: true }).extend({
+  root: is.string().optional().transform((v) => v ? `--root='${v}'` : ""),
+}).transform((v) => Object.values(v).filter(Boolean).join(" "))
+
 const vendor = common.extend({
   lock: lock.check,
   modules: modules.vendor,
@@ -344,11 +357,16 @@ const _make = is.object({
   task: is.union([is.string(), is.array(is.string())]).transform((v) => Array.isArray(v) ? v.join(" ") : v),
   description: is.union([is.string(), is.array(is.string())]).transform((v) => Array.isArray(v) ? v.join(" ") : v)
     .default(""),
-  env: is.record(is.string(), is.union([is.boolean(), is.string()])).transform((v) =>
+  env: is.record(is.string(), is.union([is.boolean(), is.string()])).transform((
+    v,
+  ) =>
     Object.fromEntries(
-      Object.entries(v).map(([k, v]) => [k, v === true ? Deno.env.get(k) ?? "" : v === false ? "" : v]),
+      Object.entries(v).map((
+        [k, v],
+      ) => [k, v === true ? Deno.env.get(k) ?? "" : v === false ? "" : v]),
     )
   ).default(() => ({})),
+  cwd: is.string().optional(),
   deno: is.object({
     bench,
     bundle,
@@ -372,18 +390,33 @@ const _make = is.object({
 })
 
 /** Compute command to execute after applying deno flags */
-export function command(raw: string, { deno }: Pick<is.infer<typeof _make>, "deno">, { colors = false } = {}) {
+export function command(
+  raw: string,
+  { deno }: Pick<is.infer<typeof _make>, "deno">,
+  { colors = false } = {},
+) {
   for (const [subcommand, flags] of Object.entries(deno)) {
-    raw = raw.replaceAll(`deno ${subcommand}`, `deno ${subcommand} ${colors ? italic(underline(flags)) : flags}`)
+    raw = raw.replaceAll(
+      `deno ${subcommand}`,
+      `deno ${subcommand} ${colors ? italic(underline(flags)) : flags}`,
+    )
   }
   return raw
 }
 
 /** Entry point */
 export async function make(
-  { task = "", config = "deno.jsonc", log = console.log, exit = true, stdio = "inherit" as "inherit" | "null" } = {},
+  {
+    task = "",
+    config = "deno.jsonc",
+    log = console.log,
+    exit = true,
+    stdio = "inherit" as "inherit" | "null",
+  } = {},
 ) {
-  const { "+tasks": _tasks = {} } = JSONC.parse(await Deno.readTextFile(config)) as {
+  const { "+tasks": _tasks = {} } = JSONC.parse(
+    await Deno.readTextFile(config),
+  ) as {
     "+tasks"?: Record<string, unknown>
   }
   const tasks = Object.fromEntries(
@@ -397,7 +430,7 @@ export async function make(
   )
   if (task) {
     const temp = ".deno-make.json"
-    const { task: raw, env, deno } = tasks[task]
+    const { task: raw, env, deno, cwd } = tasks[task]
     try {
       const make = command(raw, { deno })
       await Deno.writeTextFile(temp, JSON.stringify({ tasks: { make } }))
@@ -407,6 +440,7 @@ export async function make(
         stderr: stdio,
         stdin: stdio,
         env,
+        cwd,
         windowsRawArguments: true,
       })
       const { code } = await process.output()
@@ -418,17 +452,30 @@ export async function make(
       await Deno.remove(temp)
     }
   } else if (Object.keys(tasks).length) {
-    for (const [name, { task, description, env, deno }] of Object.entries(tasks)) {
+    for (
+      const [name, { task, description, env, cwd, deno }] of Object.entries(
+        tasks,
+      )
+    ) {
       const { icon = "" } = description.match(/^(?<icon>[\p{Emoji}\u200d]+) /u)?.groups ?? {}
       log(bgBrightBlue(`${icon} ${bold(name)}`.trim().padEnd(32)))
       log(description.replace(icon, "").trim())
       if (Object.keys(env).length) {
         log(gray(`Environment variables:`))
         for (const [k, v] of Object.entries(env)) {
-          const inherited =
-            ((_tasks as Record<string, is.infer<typeof _make>>)[name].env[k] as unknown as string | boolean) === true
-          log(gray(`  ${k}=${v}${inherited ? underline(italic("→ inherited")) : ""}`.trim()))
+          const inherited = ((_tasks as Record<string, is.infer<typeof _make>>)[name]
+            .env[k] as unknown as string | boolean) === true
+          log(
+            gray(
+              `  ${k}=${v}${inherited ? underline(italic("→ inherited")) : ""}`
+                .trim(),
+            ),
+          )
         }
+      }
+      if (cwd) {
+        log(gray(`Working directory:`))
+        log(gray(`  ${cwd}`))
       }
       log(gray(`Task:`))
       log(gray(`  ${command(task, { deno }, { colors: true })}`))

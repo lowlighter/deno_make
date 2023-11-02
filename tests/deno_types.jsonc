@@ -4,7 +4,8 @@
   },
   "+tasks": {
     "flags:none": {
-      "task": "deno types"
+      "task": "deno types",
+      "cwd": "tests"
     }
   }
 }

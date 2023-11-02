@@ -4,10 +4,12 @@
   },
   "+tasks": {
     "flags:none": {
-      "task": "deno vendor 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'"
+      "task": "deno vendor mod.ts",
+      "cwd": "tests"
     },
     "flags:output_1": {
-      "task": "deno run 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'",
+      "task": "deno run mod.ts",
+      "cwd": "tests",
       "deno": {
         "vendor": {
           "output": "vendor"
@@ -15,7 +17,8 @@
       }
     },
     "flags:output_2": {
-      "task": "deno run 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'",
+      "task": "deno run mod.ts",
+      "cwd": "tests",
       "deno": {
         "vendor": {
           "output": {
@@ -26,7 +29,8 @@
       }
     },
     "flags:output_3": {
-      "task": "deno run 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'",
+      "task": "deno run mod.ts",
+      "cwd": "tests",
       "deno": {
         "vendor": {
           "output": {
@@ -36,7 +40,8 @@
       }
     },
     "flags:lock": {
-      "task": "deno run 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'",
+      "task": "deno run mod.ts",
+      "cwd": "tests",
       "deno": {
         "vendor": {
           "lock": "deno.lock"

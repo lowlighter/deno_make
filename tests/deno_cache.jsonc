@@ -4,7 +4,8 @@
   },
   "+tasks": {
     "flags:none": {
-      "task": "deno cache tests/mod.ts"
+      "task": "deno cache mod.ts",
+      "cwd": "tests"
     }
   }
 }

@@ -4,22 +4,30 @@
   },
   "+tasks": {
     "make": {
-      "task": "exit 1",
-      "description": "🦕 test",
-      "env": {
-        "DINOSAUR": "🦖"
-      }
-    },
-    "make:no_description": {
       "task": "exit 1"
     },
+    "make:description": {
+      "task": "exit 1",
+      "description": "🦕 test"
+    },
     "make:deno": {
-      "task": "deno quiet",
+      "task": "deno info",
       "deno": {
         "info": {
           "quiet": true
         }
       }
+    },
+    "make:env": {
+      "task": "exit 1",
+      "env": {
+        "DINOSAUR": "🦖",
+        "INHERIT": true
+      }
+    },
+    "make:cwd": {
+      "task": "cwd",
+      "cwd": "tests"
     }
   }
 }

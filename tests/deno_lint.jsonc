@@ -4,10 +4,50 @@
   },
   "+tasks": {
     "flags:none": {
-      "task": "deno types"
-    },
-    "flags:rules_1": {
       "task": "deno lint",
+      "cwd": "tests"
+    },
+    "flags:json": {
+      "task": "deno lint",
+      "cwd": "tests",
+      "deno": {
+        "lint": {
+          "json": true,
+          "compact": false
+        }
+      }
+    },
+    "flags:compact": {
+      "task": "deno lint",
+      "cwd": "tests",
+      "deno": {
+        "lint": {
+          "compact": true,
+          "json": false
+        }
+      }
+    },
+    "flags:array": {
+      "task": "deno lint",
+      "cwd": "tests",
+      "deno": {
+        "lint": {
+          "ignore": ["*.js"]
+        }
+      }
+    },
+    "flags:array_empty": {
+      "task": "deno lint",
+      "cwd": "tests",
+      "deno": {
+        "lint": {
+          "ignore": []
+        }
+      }
+    },
+    "flags:rules": {
+      "task": "deno lint",
+      "cwd": "tests",
       "deno": {
         "lint": {
           "rules": {
@@ -18,8 +58,9 @@
         }
       }
     },
-    "flags:rules_2": {
+    "flags:rules_empty": {
       "task": "deno lint",
+      "cwd": "tests",
       "deno": {
         "lint": {
           "rules": {
@@ -27,38 +68,6 @@
             "include": [],
             "exclude": []
           }
-        }
-      }
-    },
-    "flags:json": {
-      "task": "deno lint",
-      "deno": {
-        "lint": {
-          "json": true
-        }
-      }
-    },
-    "flags:compact": {
-      "task": "deno lint",
-      "deno": {
-        "lint": {
-          "compact": true
-        }
-      }
-    },
-    "flags:ignore_1": {
-      "task": "deno lint",
-      "deno": {
-        "lint": {
-          "ignore": ["*.js"]
-        }
-      }
-    },
-    "flags:ignore_2": {
-      "task": "deno lint",
-      "deno": {
-        "lint": {
-          "ignore": []
         }
       }
     }

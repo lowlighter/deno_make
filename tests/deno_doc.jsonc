@@ -4,14 +4,26 @@
   },
   "+tasks": {
     "flags:none": {
-      "task": "deno doc tests/mod.ts"
+      "task": "deno doc mod.ts",
+      "cwd": "tests"
     },
-    "flags:options": {
-      "task": "deno doc tests/mod.ts",
+    "flags:boolean_true": {
+      "task": "deno doc mod.ts",
+      "cwd": "tests",
       "deno": {
         "doc": {
           "private": true,
           "json": true
+        }
+      }
+    },
+    "flags:boolean_false": {
+      "task": "deno doc mod.ts",
+      "cwd": "tests",
+      "deno": {
+        "doc": {
+          "private": false,
+          "json": false
         }
       }
     }

@@ -3,42 +3,47 @@
     "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
   },
   "+tasks": {
-    "flags:general": {
-      "task": "deno run tests/mod.ts",
+    "flags:general:boolean": {
+      "task": "deno help",
+      "cwd": "tests",
       "deno": {
         "run": {
           "unstable": true,
           "quiet": true,
-          "seed": 0,
-          "ignoreCertificateErrors": true
+          "certificateErrors": true
+        },
+        "test": {
+          "unstable": false,
+          "quiet": false,
+          "certificateErrors": false
         }
       }
     },
-    "flags:resolution": {
-      "task": "deno run tests/mod.ts",
+    "flags:general:string": {
+      "task": "deno help",
+      "cwd": "tests",
       "deno": {
         "run": {
-          "importMap": "tests/.imports.json",
+          "importMap": "imports.json",
+          "cert": "/dev/null",
           "location": "https://deno.test"
         }
       }
     },
-    "flags:config": {
-      "task": "deno run tests/mod.ts",
+    "flags:general:number": {
+      "task": "deno help",
+      "cwd": "tests",
+
       "deno": {
         "run": {
-          "config": "tests/deno_common.jsonc"
-        },
-        "lint": {
-          "config": false
-        },
-        "fmt": {
-          "config": true
+          "seed": 0
         }
       }
     },
-    "flags:v8_flags": {
-      "task": "deno run tests/mod.ts",
+    "flags:general:array": {
+      "task": "deno help",
+      "cwd": "tests",
+
       "deno": {
         "run": {
           "v8Flags": ["--print-code"]
@@ -47,17 +52,298 @@
           "v8Flags": []
         }
       }
+    },
+    "flags:config": {
+      "task": "deno help",
+      "cwd": "tests",
+      "deno": {
+        "run": {
+          "config": "deno.jsonc"
+        },
+        "test": {
+          "config": true
+        },
+        "lint": {
+          "config": false
+        }
+      }
+    },
+    "flags:lock:string": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "vendor": {
+          "lock": "deno.lock"
+        },
+        "info": {
+          "lock": "deno.lock"
+        },
+        "run": {
+          "lock": "deno.lock"
+        }
+      }
+    },
+    "flags:lock:boolean": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "info": {
+          "lock": false
+        },
+        "run": {
+          "lock": false
+        }
+      }
+    },
+    "flags:lock:object": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "lock": {
+            "write": true
+          }
+        },
+        "test": {
+          "lock": {
+            "file": "deno.lock",
+            "write": false
+          }
+        }
+      }
+    },
+    "flags:permissions:all": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "permissions": {
+            "allow": true,
+            "prompt": true
+          }
+        },
+        "test": {
+          "permissions": {
+            "allow": false
+          }
+        }
+      }
+    },
+    "flags:permissions:boolean": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "permissions": {
+            "read": true,
+            "write": true,
+            "net": true,
+            "env": true,
+            "sys": true,
+            "run": true,
+            "ffi": true,
+            "hrtime": true,
+            "prompt": true
+          }
+        },
+        "test": {
+          "permissions": {
+            "read": false,
+            "write": false,
+            "net": false,
+            "env": false,
+            "sys": false,
+            "run": false,
+            "ffi": false,
+            "hrtime": false,
+            "prompt": false
+          }
+        }
+      }
+    },
+    "flags:permissions:array": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "permissions": {
+            "read": ["test"],
+            "write": ["test"],
+            "net": ["https://example.com"],
+            "env": ["TEST"],
+            "sys": ["osRelease"],
+            "run": ["deno"],
+            "ffi": ["test"]
+          }
+        },
+        "test": {
+          "permissions": {
+            "read": [],
+            "write": [],
+            "net": [],
+            "env": [],
+            "sys": [],
+            "run": [],
+            "ffi": []
+          }
+        }
+      }
+    },
+    "flags:permissions:allow_deny_object": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "permissions": {
+            "read": { "allow": ["test"], "deny": ["test"] },
+            "write": { "allow": ["test"], "deny": ["test"] },
+            "net": { "allow": ["https://example.com"], "deny": ["https://example.com"] },
+            "env": { "allow": ["TEST"], "deny": ["TEST"] },
+            "sys": { "allow": ["osRelease"], "deny": ["osRelease"] },
+            "run": { "allow": ["deno"], "deny": ["deno"] },
+            "ffi": { "allow": ["test"], "deny": ["test"] }
+          }
+        },
+        "test": {
+          "permissions": {
+            "read": { "allow": [], "deny": [] },
+            "write": { "allow": [], "deny": [] },
+            "net": { "allow": [], "deny": [] },
+            "env": { "allow": [], "deny": [] },
+            "sys": { "allow": [], "deny": [] },
+            "run": { "allow": [], "deny": [] },
+            "ffi": { "allow": [], "deny": [] }
+          }
+        }
+      }
+    },
+    "flags:modules:boolean": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "cached": true,
+          "remote": true,
+          "npm": true,
+          "check": true,
+          "reload": true,
+          "node_modules": true,
+          "vendor": true
+        },
+        "test": {
+          "cached": false,
+          "remote": false,
+          "npm": false,
+          "check": false,
+          "reload": false,
+          "node_modules": false,
+          "vendor": false
+        }
+      }
+    },
+    "flags:modules:string": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "check": "all"
+        }
+      }
+    },
+    "flags:modules:array": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "reload": ["npm:"]
+        },
+        "test": {
+          "reload": []
+        }
+      }
+    },
+    "flags:inspect:string": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "inspect": "127.0.0.1:9229"
+        }
+      }
+    },
+    "flags:inspect:object": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "inspect": {
+            "listen": "127.0.0.1:9229",
+            "break": "127.0.0.1:9230",
+            "wait:": "127.0.0.1:9229"
+          }
+        },
+        "test": {
+          "inspect": {
+          }
+        }
+      }
+    },
+    "flags:watch:boolean": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "watch": true
+        },
+        "test": {
+          "watch": false
+        }
+      }
+    },
+    "flags:watch:array": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "watch": ["mod.ts"]
+        },
+        "test": {
+          "watch": []
+        }
+      }
+    },
+    "flags:watch:object": {
+      "task": "deno help",
+      "cwd": "tests",
+
+      "deno": {
+        "run": {
+          "watch": {
+            "files": ["mod.ts"],
+            "clearScreen": true
+          }
+        },
+        "test": {
+          "watch": {
+            "files": [],
+            "clearScreen": false
+          }
+        }
+      }
     }
   }
 }
-
-/** Common flags
-const common = is.object({
-  config: is.union([
-    is.boolean().transform((v) => v === false ? "--no-config" : ""),
-    is.string().transform((v) => v ? `--config='${v}'` : ""),
-  ]).optional(),
-  cert: is.string().optional().transform((v) => v ? `--cert='${v}'` : ""),
-})
-
-*/
