@@ -1,7 +1,7 @@
 // Imports
 import * as JSONC from "https://deno.land/std@0.203.0/jsonc/mod.ts"
 import { z as is } from "https://deno.land/x/zod@v3.21.4/mod.ts"
-import { fromZodError } from "https://esm.sh/zod-validation-error@1.5.0"
+import { fromZodError } from "https://esm.sh/zod-validation-error@1.5.0?pin=v133"
 import { bgBrightBlue, bold, gray, italic, underline, yellow } from "https://deno.land/std@0.203.0/fmt/colors.ts"
 
 // Structure flags =========================================================================================================

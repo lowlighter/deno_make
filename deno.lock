@@ -211,6 +211,7 @@
     "https://esm.sh/v133/type-detect@4.0.8/denonext/type-detect.mjs": "deb58bd7203992249a5795f7da35d00b67077fe6c03019349cb614ba22ef52ad",
     "https://esm.sh/v133/zod-validation-error@1.5.0/denonext/zod-validation-error.mjs": "5668026e1c5e48df41677eb1c0bf1b7c66e0fd125c40934f37d32bf72610543a",
     "https://esm.sh/v133/zod@3.22.4/denonext/zod.mjs": "660128af5d1e921745c4d452472d103d9f2fc5afa508bbf233b83d35a272ad67",
-    "https://esm.sh/zod-validation-error@1.5.0": "78c876230174f315432e87ae4c761c2a833f2abddf0544a335ff5c80fdb42ddb"
+    "https://esm.sh/zod-validation-error@1.5.0": "78c876230174f315432e87ae4c761c2a833f2abddf0544a335ff5c80fdb42ddb",
+    "https://esm.sh/zod-validation-error@1.5.0?pin=v133": "78c876230174f315432e87ae4c761c2a833f2abddf0544a335ff5c80fdb42ddb"
   }
 }
