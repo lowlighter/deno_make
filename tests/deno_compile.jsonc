@@ -1,1 +1,34 @@
-{}
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno compile mod.ts",
+      "cwd": "tests"
+    },
+    "flags:case_1": {
+      "task": "deno compile mod.ts",
+      "cwd": "tests",
+      "deno": {
+        "compile": {
+          "include": ["mod_test.ts"],
+          "output": ".mod.bin",
+          "target": "x86_64-unknown-linux-gnu"
+        }
+      }
+    },
+    "flags:case_2": {
+      "task": "deno compile mod.ts",
+      "cwd": "tests",
+      "deno": {
+        "compile": {
+          "include": [],
+          "output": ".mod.bin",
+          "target": "x86_64-pc-windows-msvc",
+          "terminal": false
+        }
+      }
+    }
+  }
+}

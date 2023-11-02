@@ -22,7 +22,7 @@
       "task": "exit 1",
       "env": {
         "DINOSAUR": "🦖",
-        "INHERIT": true
+        "TEST_INHERIT": true
       }
     },
     "make:cwd": {

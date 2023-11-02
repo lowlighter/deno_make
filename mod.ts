@@ -1,8 +1,8 @@
 // Imports
-import * as JSONC from "https://deno.land/std@0.203.0/jsonc/mod.ts"
+import * as JSONC from "https://deno.land/std@0.205.0/jsonc/mod.ts"
 import { z as is } from "https://deno.land/x/zod@v3.21.4/mod.ts"
 import { fromZodError } from "https://esm.sh/zod-validation-error@1.5.0?pin=v133"
-import { bgBrightBlue, bold, gray, italic, underline, yellow } from "https://deno.land/std@0.203.0/fmt/colors.ts"
+import { bgBrightBlue, bold, gray, italic, underline, yellow } from "https://deno.land/std@0.205.0/fmt/colors.ts"
 
 // Structure flags =========================================================================================================
 
@@ -162,7 +162,7 @@ const modules = {
 
 /** Inspect flags */
 const inspect = is.union([
-  is.string().transform((v) => v ? `--inspect='${v}'` : ""),
+  is.string().min(1).transform((v) => `--inspect='${v}'`),
   is.object({
     listen: is.string().min(1).optional().transform((v) => v ? `--inspect='${v}'` : ""),
     break: is.string().min(1).optional().transform((v) => v ? `--inspect-brk='${v}'` : ""),
@@ -355,8 +355,9 @@ const vendor = common.extend({
 
 const _make = is.object({
   task: is.union([is.string(), is.array(is.string())]).transform((v) => Array.isArray(v) ? v.join(" ") : v),
-  description: is.union([is.string(), is.array(is.string())]).transform((v) => Array.isArray(v) ? v.join(" ") : v)
-    .default(""),
+  description: is.union([is.string(), is.array(is.string())]).default("").transform((v) =>
+    Array.isArray(v) ? v.join(" ") : v
+  ),
   env: is.record(is.string(), is.union([is.boolean(), is.string()])).transform((
     v,
   ) =>
@@ -411,7 +412,7 @@ export async function make(
     config = "deno.jsonc",
     log = console.log,
     exit = true,
-    stdio = "inherit" as "inherit" | "null",
+    stdio = "inherit" as "inherit" | "piped" | "null",
   } = {},
 ) {
   const { "+tasks": _tasks = {} } = JSONC.parse(
@@ -429,27 +430,33 @@ export async function make(
     }),
   )
   if (task) {
-    const temp = ".deno-make.json"
     const { task: raw, env, deno, cwd } = tasks[task]
+    const temp = ".deno-make.json"
+    const decoder = new TextDecoder()
     try {
       const make = command(raw, { deno })
       await Deno.writeTextFile(temp, JSON.stringify({ tasks: { make } }))
       const process = new Deno.Command("deno", {
-        args: ["task", "--config", temp, "make"],
+        args: ["task", ...(cwd ? ["--cwd", cwd] : []), "--config", temp, "make"],
         stdout: stdio,
         stderr: stdio,
         stdin: stdio,
         env,
-        cwd,
         windowsRawArguments: true,
-      })
-      const { code } = await process.output()
+      }).spawn()
+      if (stdio === "piped") {
+        const { stdout, stderr } = await process.output()
+        log(decoder.decode(stdout))
+        log(decoder.decode(stderr))
+        await process.stdin?.close()
+      }
+      const { code } = await process.status
       if (exit) {
         Deno.exit(code)
       }
       return { code }
     } finally {
-      await Deno.remove(temp)
+      await Deno.remove(temp).catch(() => null)
     }
   } else if (Object.keys(tasks).length) {
     for (

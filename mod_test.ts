@@ -15,9 +15,9 @@ for await (const { path, name: _name } of expandGlob("tests/*.jsonc")) {
       const { code } = await make({
         task,
         config: path,
+        stdio: "piped",
         log: (message) => stdio.push(message),
         exit: false,
-        stdio: "null",
       })
       try {
         expect(code).to.equal(0)

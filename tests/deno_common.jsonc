@@ -33,7 +33,6 @@
     "flags:general:number": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "seed": 0
@@ -43,7 +42,6 @@
     "flags:general:array": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "v8Flags": ["--print-code"]
@@ -71,7 +69,6 @@
     "flags:lock:string": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "vendor": {
           "lock": "deno.lock"
@@ -87,7 +84,6 @@
     "flags:lock:boolean": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "info": {
           "lock": false
@@ -100,7 +96,6 @@
     "flags:lock:object": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "lock": {
@@ -118,17 +113,16 @@
     "flags:permissions:all": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "permissions": {
-            "allow": true,
+            "all": true,
             "prompt": true
           }
         },
         "test": {
           "permissions": {
-            "allow": false
+            "all": false
           }
         }
       }
@@ -136,7 +130,6 @@
     "flags:permissions:boolean": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "permissions": {
@@ -169,7 +162,6 @@
     "flags:permissions:array": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "permissions": {
@@ -198,7 +190,6 @@
     "flags:permissions:allow_deny_object": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "permissions": {
@@ -227,55 +218,61 @@
     "flags:modules:boolean": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
-          "cached": true,
-          "remote": true,
-          "npm": true,
-          "check": true,
-          "reload": true,
-          "node_modules": true,
-          "vendor": true
+          "modules": {
+            "cached": true,
+            "remote": true,
+            "npm": true,
+            "check": true,
+            "reload": true,
+            "node_modules": true,
+            "vendor": true
+          }
         },
         "test": {
-          "cached": false,
-          "remote": false,
-          "npm": false,
-          "check": false,
-          "reload": false,
-          "node_modules": false,
-          "vendor": false
+          "modules": {
+            "cached": false,
+            "remote": false,
+            "npm": false,
+            "check": false,
+            "reload": false,
+            "node_modules": false,
+            "vendor": false
+          }
         }
       }
     },
     "flags:modules:string": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
-          "check": "all"
+          "modules": {
+            "check": "all"
+          }
         }
       }
     },
     "flags:modules:array": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
-          "reload": ["npm:"]
+          "modules": {
+            "reload": ["npm:"]
+          }
         },
         "test": {
-          "reload": []
+          "modules": {
+            "reload": []
+          }
         }
       }
     },
     "flags:inspect:string": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "inspect": "127.0.0.1:9229"
@@ -284,14 +281,12 @@
     },
     "flags:inspect:object": {
       "task": "deno help",
-      "cwd": "tests",
-
       "deno": {
         "run": {
           "inspect": {
             "listen": "127.0.0.1:9229",
             "break": "127.0.0.1:9230",
-            "wait:": "127.0.0.1:9229"
+            "wait:": "127.0.0.1:9231"
           }
         },
         "test": {
@@ -303,7 +298,6 @@
     "flags:watch:boolean": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "watch": true
@@ -316,7 +310,6 @@
     "flags:watch:array": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "watch": ["mod.ts"]
@@ -329,7 +322,6 @@
     "flags:watch:object": {
       "task": "deno help",
       "cwd": "tests",
-
       "deno": {
         "run": {
           "watch": {

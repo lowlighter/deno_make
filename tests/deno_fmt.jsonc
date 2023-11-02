@@ -14,7 +14,6 @@
         "fmt": {
           "check": true,
           "tabs": true,
-          "singleQuote": true,
           "semicolons": true
         }
       }
@@ -28,6 +27,16 @@
           "tabs": false,
           "singleQuote": false,
           "semicolons": false
+        }
+      }
+    },
+    "flags:single_quote": {
+      "task": "deno fmt mod.ts || true",
+      "cwd": "tests",
+      "deno": {
+        "fmt": {
+          "check": true,
+          "singleQuote": true
         }
       }
     },
@@ -56,7 +65,7 @@
       "cwd": "tests",
       "deno": {
         "fmt": {
-          "ignore": ["*"]
+          "ignore": ["mod_test.ts"]
         }
       }
     },

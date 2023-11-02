@@ -9,7 +9,7 @@
         "rm -rf .coverage &&",
         "deno test &&",
         "deno coverage .coverage &&",
-        "rm -rf tests/.coverage tests/.coverage.report tests/.deno.lock tests/.junit.xml"
+        "rm -rf tests/.coverage tests/.coverage.report tests/.deno.lock tests/.junit.xml tests/.mod.bin tests/.mod.bin.exe tests/*.exe"
       ],
       "deno": {
         "test": {
@@ -18,6 +18,7 @@
           "traceOps": true,
           "permissions": {
             "read": true,
+            "env": ["TEST_INHERIT"],
             "write": [".deno-make.json"],
             "run": ["deno"]
           }

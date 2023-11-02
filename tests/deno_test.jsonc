@@ -48,19 +48,19 @@
       }
     },
     "flags:string": {
-      "task": "deno test tests/mod_test.ts",
+      "task": "deno test mod_test.ts",
       "cwd": "tests",
       "deno": {
         "test": {
           "coverage": ".coverage",
           "reporter": "junit",
           "filter": "junit",
-          "junitPath": "tests/.junit.xml"
+          "junitPath": ".junit.xml"
         }
       }
     },
     "flags:array": {
-      "task": "deno test tests/mod_test.ts",
+      "task": "deno test mod_test.ts",
       "cwd": "tests",
       "deno": {
         "test": {
@@ -69,7 +69,7 @@
       }
     },
     "flags:array_empty": {
-      "task": "deno test tests/mod_test.ts",
+      "task": "deno test mod_test.ts",
       "cwd": "tests",
       "deno": {
         "test": {

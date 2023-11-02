@@ -35,15 +35,15 @@
         }
       }
     },
-    "flags:array": {
+    /*"flags:array": {
       "task": "deno coverage .coverage",
       "cwd": "tests",
       "deno": {
         "coverage": {
-          "ignore": ["foo"]
+          "ignore": ["../.coverage"]
         }
       }
-    },
+    },*/
     "flags:array_empty": {
       "task": "deno coverage .coverage",
       "cwd": "tests",

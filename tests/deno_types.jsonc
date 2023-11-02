@@ -6,6 +6,13 @@
     "flags:none": {
       "task": "deno types",
       "cwd": "tests"
+    },
+    "flags:common": {
+      "task": "deno types",
+      "cwd": "tests",
+      "types": {
+        "quiet": true
+      }
     }
   }
 }
