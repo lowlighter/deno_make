@@ -1,0 +1,18 @@
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno check tests/mod.ts"
+    },
+    "flags:all": {
+      "task": "deno check tests/mod.ts",
+      "deno": {
+        "check": {
+          "all": true
+        }
+      }
+    }
+  }
+}

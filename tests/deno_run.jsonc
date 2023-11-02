@@ -1,0 +1,63 @@
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno run tests/mod.ts"
+    },
+    "flags:ext": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "ext": "ts"
+        }
+      }
+    },
+    "flags:lock_1": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "lock": true
+        }
+      }
+    },
+    "flags:lock_2": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "lock": false
+        }
+      }
+    },
+    "flags:lock_3": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "lock": {
+            "write": false
+          }
+        }
+      }
+    },
+    "flags:lock_4": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "lock": {
+            "file": "tests/.deno.lock",
+            "write": true
+          }
+        }
+      }
+    },
+    "flags:lock_5": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "lock": "deno.lock"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno test tests/mod_test.ts"
+    },
+    "flags:doc": {
+      "task": "deno test tests/mod_test.ts",
+      "deno": {
+        "test": {
+          "doc": true
+        }
+      }
+    },
+    "flags:execution_1": {
+      "task": "deno test tests/mod_test.ts",
+      "deno": {
+        "test": {
+          "traceOps": true,
+          "failFast": true,
+          "shuffle": true,
+          "parallel": true,
+          "run": true,
+          "allowNone": true
+        }
+      }
+    },
+    "flags:execution_2": {
+      "task": "deno test tests/mod_test.ts",
+      "deno": {
+        "test": {
+          "traceOps": false,
+          "failFast": false,
+          "shuffle": false,
+          "parallel": false,
+          "run": false,
+          "allowNone": false
+        }
+      }
+    },
+    "flags:execution_number": {
+      "task": "deno test tests/mod_test.ts",
+      "deno": {
+        "test": {
+          "failFast": 1,
+          "shuffle": 1
+        }
+      }
+    },
+    "flags:reporter": {
+      "task": "deno test tests/mod_test.ts",
+      "deno": {
+        "test": {
+          "coverage": "tests/.coverage",
+          "reporter": "junit",
+          "junitPath": "tests/.junit.xml"
+        }
+      }
+    },
+    "flags:ignore_1": {
+      "task": "deno test tests/mod_test.ts",
+      "deno": {
+        "test": {
+          "ignore": ["*_test.ts"]
+        }
+      }
+    },
+    "flags:ignore_2": {
+      "task": "deno test tests/mod_test.ts",
+      "deno": {
+        "test": {
+          "ignore": []
+        }
+      }
+    },
+    "flags:filter": {
+      "task": "deno test tests/mod_test.ts",
+      "deno": {
+        "test": {
+          "filter": "dummy"
+        }
+      }
+    }
+  }
+}

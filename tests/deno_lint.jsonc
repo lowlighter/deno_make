@@ -1,0 +1,66 @@
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno types"
+    },
+    "flags:rules_1": {
+      "task": "deno lint",
+      "deno": {
+        "lint": {
+          "rules": {
+            "tags": ["recommended"],
+            "include": ["single-var-declarator"],
+            "exclude": ["no-deprecated-deno-api"]
+          }
+        }
+      }
+    },
+    "flags:rules_2": {
+      "task": "deno lint",
+      "deno": {
+        "lint": {
+          "rules": {
+            "tags": [],
+            "include": [],
+            "exclude": []
+          }
+        }
+      }
+    },
+    "flags:json": {
+      "task": "deno lint",
+      "deno": {
+        "lint": {
+          "json": true
+        }
+      }
+    },
+    "flags:compact": {
+      "task": "deno lint",
+      "deno": {
+        "lint": {
+          "compact": true
+        }
+      }
+    },
+    "flags:ignore_1": {
+      "task": "deno lint",
+      "deno": {
+        "lint": {
+          "ignore": ["*.js"]
+        }
+      }
+    },
+    "flags:ignore_2": {
+      "task": "deno lint",
+      "deno": {
+        "lint": {
+          "ignore": []
+        }
+      }
+    }
+  }
+}

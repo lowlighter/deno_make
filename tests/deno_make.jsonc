@@ -1,0 +1,25 @@
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "make": {
+      "task": "exit 1",
+      "description": "🦕 test",
+      "env": {
+        "DINOSAUR": "🦖"
+      }
+    },
+    "make:no_description": {
+      "task": "exit 1"
+    },
+    "make:deno": {
+      "task": "deno quiet",
+      "deno": {
+        "info": {
+          "quiet": true
+        }
+      }
+    }
+  }
+}

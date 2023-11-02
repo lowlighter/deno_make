@@ -1,0 +1,63 @@
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:general": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "unstable": true,
+          "quiet": true,
+          "seed": 0,
+          "ignoreCertificateErrors": true
+        }
+      }
+    },
+    "flags:resolution": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "importMap": "tests/.imports.json",
+          "location": "https://deno.test"
+        }
+      }
+    },
+    "flags:config": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "config": "tests/deno_common.jsonc"
+        },
+        "lint": {
+          "config": false
+        },
+        "fmt": {
+          "config": true
+        }
+      }
+    },
+    "flags:v8_flags": {
+      "task": "deno run tests/mod.ts",
+      "deno": {
+        "run": {
+          "v8Flags": ["--print-code"]
+        },
+        "test": {
+          "v8Flags": []
+        }
+      }
+    }
+  }
+}
+
+/** Common flags
+const common = is.object({
+  config: is.union([
+    is.boolean().transform((v) => v === false ? "--no-config" : ""),
+    is.string().transform((v) => v ? `--config='${v}'` : ""),
+  ]).optional(),
+  cert: is.string().optional().transform((v) => v ? `--cert='${v}'` : ""),
+})
+
+*/

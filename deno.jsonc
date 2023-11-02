@@ -1,0 +1,53 @@
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "test": {
+      "description": "🧪 Run tests and benchmarks. Print collected coverage",
+      "task": [
+        "rm -rf .coverage &&",
+        "deno test &&",
+        "deno coverage .coverage"
+      ],
+      "deno": {
+        "test": {
+          "coverage": ".coverage",
+          "doc": true,
+          "traceOps": true,
+          "permissions": {
+            "read": true,
+            "write": [".deno-make.json"],
+            "run": ["deno"]
+          }
+        }
+      },
+      "env": {
+        "DINOSAUR": "🦕"
+      }
+    },
+    "code": {
+      "description": "🧼 Lint and format code",
+      "task": "deno lint && deno fmt"
+    },
+    "code:check": {
+      "description": "🤖 Lint and check code fomatting",
+      "task": "deno lint && deno fmt --check"
+    }
+  },
+  "fmt": {
+    "lineWidth": 120,
+    "semiColons": false,
+    "exclude": [".coverage", ".deno-make.json"]
+  }
+}
+/*
+bench
+bundle
+compile
+_eval
+fmt
+install
+uninstall
+repl
+*/

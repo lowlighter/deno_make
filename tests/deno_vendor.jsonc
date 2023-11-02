@@ -1,0 +1,47 @@
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno vendor 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'"
+    },
+    "flags:output_1": {
+      "task": "deno run 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'",
+      "deno": {
+        "vendor": {
+          "output": "vendor"
+        }
+      }
+    },
+    "flags:output_2": {
+      "task": "deno run 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'",
+      "deno": {
+        "vendor": {
+          "output": {
+            "path": "vendor",
+            "force:": true
+          }
+        }
+      }
+    },
+    "flags:output_3": {
+      "task": "deno run 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'",
+      "deno": {
+        "vendor": {
+          "output": {
+            "force:": false
+          }
+        }
+      }
+    },
+    "flags:lock": {
+      "task": "deno run 'data:application/typescript;base64,Y29uc29sZS5sb2coJ2Zvbycp'",
+      "deno": {
+        "vendor": {
+          "lock": "deno.lock"
+        }
+      }
+    }
+  }
+}
