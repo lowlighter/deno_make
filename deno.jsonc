@@ -18,7 +18,7 @@
         "deno test &&",
         "deno coverage .coverage &&",
         // Cleanup test environment
-        "rm -rf .coverage tests/.[!.]* tests/*.exe"
+        "rm -rf .coverage tests/.[!.]*"
       ],
       "deno": {
         "test": {
