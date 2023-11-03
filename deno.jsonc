@@ -48,7 +48,7 @@
     "ci": {
       "description": "🤖 CI checks",
       "task": [
-        "deno task make code:check",
+        "deno task make code:check &&",
         "deno task make test"
       ]
     }
