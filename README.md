@@ -1,105 +1,109 @@
 # 🍳🦕 deno make
 
-_deno make_ integrates seemlessly within your `deno.jsonc` configuration file to provide an extended set of features to
-the [deno](https://deno.land) task runner.
+_deno make_ integrates seemlessly with your existing `deno.jsonc` configuration file to provide an extended set of
+features to the [deno](https://deno.land) task runner.
 
-You can assign default permissions and flags to deno subcommands, environment variables, assign descriptions and more.
+## 🚀 Features
 
-![deno make](/demo.png)
+- Seamless integration with your existing `deno.jsonc` configuration file
+- Set flags per deno subcommands in a descriptive way
+- Set or inherit environment variables
+- Write long tasks using arrays to improve readability
+- Add descriptions to your tasks
+- List and preview available tasks
 
-## 💭 Why ?
+![Advanced task configuration](/demo/config.png)
 
-While the default [deno task runner](https://docs.deno.com/runtime/manual/tools/task_runner) is great, it is not always
-suitable for long scripts as it's not possible to split them into multiple lines, and passing flags to deno subcommands
-is often tedious.
+![List available tasks](/demo/list.png)
 
-_deno make_ solves these issues by computing dynamically deno commands flags before calling the default deno task
-runner, in addition to providing a few extra features.
+Learn more about the syntax in [`demo/deno.jsonc`](/demo/deno.jsonc) !
+
+### 💭 But why ?
+
+The default [deno task runner](https://docs.deno.com/runtime/manual/tools/task_runner) is great, but long tasks can
+quickly become hard to read and maintain. This small script aims to solve this issue by providing a few extra features
+for convenience.
 
 ## 📚 Usage
 
-### 1. Register _deno make_ in `deno.jsonc`
+### 1️⃣ Register _deno make_ in `deno.jsonc`
 
 ```jsonc
 // deno.jsonc
 {
   "tasks": {
+    // 🔧 Alias deno_make to `deno task make` to make it easier
     "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno https://deno.land/x/make/mod.ts $0"
   }
 }
 ```
 
-### 2. Configure `"deno-make"` tasks in `deno.jsonc`
+### 2️⃣ Configure _deno_make_ tasks in `deno.jsonc`
 
 ```jsonc
 // deno.jsonc
 {
+  // 🍳 deno_make configuration
   "+tasks": {
-    "start": {
+    "start": { // ▶️ `deno task make start`
       "description": "🍱 Start application",
       "task": "deno run mod.ts",
-      "deno": {
-        "run": { // For "deno run" subcommand
-          "unstable": true, // ➡️ --unstable
+      "deno": { // ✨ Configure deno flags in a descriptive way
+        "run": { // ⚙️ `deno run`
+          "unstable": ["kv"], // ➡️ --unstable-kv
           "permissions": {
-            "prompt": false, // ➡️ --no-prompt
             "read": true, // ➡️ --allow-read
             "run": false, // ➡️ --deny-run
             "net": [ // ➡️ --allow-net=https://deno.land,https://example.com
               "https://deno.land",
               "https://example.com"
             ],
-            "write": { // ➡️ --allow-write=/tmp --deny-write=/root
-              "allow": [
-                "/tmp"
-              ],
-              "deny": [
-                "/root"
-              ]
-            }
+            "prompt": false // ➡️ --no-prompt
           }
         }
       },
-      // Configure environment variables
-      "env": {
-        "FOO": true, // ➡️ Inherit FOO environment variable
+      "env": { // ✨ Configure environment variables directly
+        "FOO": true, // ➡️ Inherit current FOO environment variable
         "BAR": "bar" // ➡️ Set BAR environment variable to "bar"
-      }
-    },
-    // Write "multi-line" tasks using arrays (they will be joined with spaces)
-    "test": {
-      "description": "🧪 Run tests and print collected coverage",
-      "task": [
-        "rm -rf .coverage &&",
-        "deno test &&",
-        "deno coverage .coverage"
-      ],
-      "deno": {
-        "test": { // For "deno test" subcommand
-          "unstable": true, // ➡️ --unstable
-          "permissions": { // ➡️ --allow-all
-            "all": true
-          },
-          "coverage": ".coverage", // ➡️ --coverage=.coverage
-          "parallel": true // ➡️ --parallel
-        },
-        "coverage": { // For "deno coverage" subcommand
-          "quiet": true // ➡️ --quiet
-        }
       }
     }
   }
 }
 ```
 
-### 3. Run tasks with `deno task make` instead
+> [!NOTE] It is even possible to alias `deno task make <+task>` to `deno task <+task>` !
+>
+> ```jsonc
+> // deno.jsonc
+> {
+>   "tasks": {
+>     "start": "deno task make start",
+>     "test": "deno task make test"
+>   }
+> }
+> ```
+
+### 3️⃣ Run tasks with _deno_make_
 
 ```bash
-deno task make run
+deno task make <+task>
 ```
 
-#### Print all available _deno make_ tasks
+> [!NOTE] If _deno_make_ was aliased back to `deno task`, just use the following instead:
+>
+> ```bash
+> deno task start
+> ```
+
+To print the list of available tasks with their configuration, run _deno_make_ without arguments:
 
 ```bash
 deno task make
+```
+
+## 📜 License
+
+```
+MIT License
+Copyright (c) 2023 Simon Lecoq
 ```
