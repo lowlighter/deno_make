@@ -1,15 +1,24 @@
 {
   "tasks": {
-    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0",
+    "test": "deno task make test",
+    "code": "deno task make code",
+    "ci": "deno task make ci"
   },
   "+tasks": {
     "test": {
       "description": "🧪 Run tests and benchmarks. Print collected coverage",
       "task": [
+        // Setup test environment
+        "mkdir -p .coverage &&",
         "rm -rf .coverage &&",
+        "(echo '' > tests/.env) &&",
+        "(echo '{}' > tests/.imports.json) &&",
+        // Run tests and print coverage
         "deno test &&",
         "deno coverage .coverage &&",
-        "rm -rf tests/.[!.]* tests/*.exe"
+        // Cleanup test environment
+        "rm -rf .coverage tests/.[!.]* tests/*.exe"
       ],
       "deno": {
         "test": {
@@ -33,8 +42,15 @@
       "task": "deno lint && deno fmt"
     },
     "code:check": {
-      "description": "🤖 Lint and check code fomatting",
+      "description": "🫧 Lint and check code fomatting",
       "task": "deno lint && deno fmt --check"
+    },
+    "ci": {
+      "description": "🤖 CI checks",
+      "task": [
+        "deno task make code:check",
+        "deno task make test"
+      ]
     }
   },
   "fmt": {

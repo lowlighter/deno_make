@@ -19,6 +19,20 @@
           "json": true
         }
       }
+    },
+    "flags:doc_alt": {
+      "task": [
+        "deno doc mod.ts;",
+        "rm -rf .docs"
+      ],
+      "cwd": "tests",
+      "deno": {
+        "doc": {
+          "html": true,
+          "name": "test",
+          "output": ".docs"
+        }
+      }
     }
   }
 }

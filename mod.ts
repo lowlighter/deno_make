@@ -8,7 +8,10 @@ import { bgBrightBlue, bold, gray, italic, underline, yellow } from "https://den
 
 /** Common flags */
 const common = is.object({
-  unstable: is.boolean().optional().transform((v) => v ? "--unstable" : ""),
+  unstable: is.union([
+    is.boolean().transform((v) => v ? "--unstable" : ""),
+    is.array(is.string()).transform((v) => v.length ? v.map((w) => `--unstable-${w}`) : ""),
+  ]).optional(),
   quiet: is.boolean().optional().transform((v) => v ? "--quiet" : ""),
   config: is.union([
     is.boolean().transform((v) => v === false ? "--no-config" : ""),
@@ -26,6 +29,10 @@ const runnable = is.object({
   certificateErrors: is.boolean().optional().transform((v) =>
     v === false ? "--unsafely-ignore-certificate-errors" : ""
   ),
+  env: is.union([
+    is.boolean().transform((v) => v ? "--env" : ""),
+    is.string().min(1).transform((v) => `--env='${v}'`),
+  ]).optional(),
 })
 
 /** Lock file flags */
@@ -234,6 +241,9 @@ const doc = common.pick({ unstable: true, quiet: true, importMap: true })
     modules: modules.doc,
     private: is.boolean().optional().transform((v) => v ? "--private" : ""),
     json: is.boolean().optional().transform((v) => v ? "--json" : ""),
+    html: is.boolean().optional().transform((v) => v ? "--html" : ""),
+    name: is.string().optional().transform((v) => v ? `--name='${v}'` : ""),
+    output: is.string().optional().transform((v) => v ? `--output='${v}'` : ""),
   }).transform((v) => Object.values(v).filter(Boolean).join(" "))
 
 const _eval = common.merge(

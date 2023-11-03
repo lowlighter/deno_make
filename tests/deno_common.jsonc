@@ -11,11 +11,23 @@
           "unstable": true,
           "quiet": true,
           "certificateErrors": false,
-          "importMap": "imports.json",
+          "importMap": ".imports.json",
           "cert": "/dev/null",
           "location": "https://deno.test",
           "seed": 0,
-          "v8Flags": ["--print-code"]
+          "v8Flags": ["--print-code"],
+          "env": true
+        },
+        "test": {
+          "env": ".env",
+          "unstable": ["kv", "bare-node-builtins"]
+        },
+        "bench": {
+          "env": false,
+          "unstable": []
+        },
+        "lint": {
+          "unstable": false
         }
       }
     },
