@@ -1,9 +1,11 @@
 name: ci
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
 permissions:
   contents: read
 jobs:
@@ -12,6 +14,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v1
-      - run: deno task make code:check
-      - run: deno task make test
+      - run: deno task ci
 
