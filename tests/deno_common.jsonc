@@ -3,51 +3,19 @@
     "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
   },
   "+tasks": {
-    "flags:general:boolean": {
+    "flags:general": {
       "task": "deno help",
       "cwd": "tests",
       "deno": {
         "run": {
           "unstable": true,
           "quiet": true,
-          "certificateErrors": true
-        },
-        "test": {
-          "unstable": false,
-          "quiet": false,
-          "certificateErrors": false
-        }
-      }
-    },
-    "flags:general:string": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
+          "certificateErrors": false,
           "importMap": "imports.json",
           "cert": "/dev/null",
-          "location": "https://deno.test"
-        }
-      }
-    },
-    "flags:general:number": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
-          "seed": 0
-        }
-      }
-    },
-    "flags:general:array": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
+          "location": "https://deno.test",
+          "seed": 0,
           "v8Flags": ["--print-code"]
-        },
-        "test": {
-          "v8Flags": []
         }
       }
     },
@@ -66,7 +34,7 @@
         }
       }
     },
-    "flags:lock:string": {
+    "flags:lock_1": {
       "task": "deno help",
       "cwd": "tests",
       "deno": {
@@ -78,35 +46,35 @@
         },
         "run": {
           "lock": "deno.lock"
-        }
-      }
-    },
-    "flags:lock:boolean": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "info": {
-          "lock": false
         },
-        "run": {
-          "lock": false
-        }
-      }
-    },
-    "flags:lock:object": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
+        "bench": {
           "lock": {
             "write": true
           }
         },
-        "test": {
+        "bundle": {
           "lock": {
             "file": "deno.lock",
             "write": false
           }
+        },
+        "cache": {
+          "lock": false
+        },
+        "check": {
+          "lock": true
+        }
+      }
+    },
+    "flags:lock_2": {
+      "task": "deno help",
+      "cwd": "tests",
+      "deno": {
+        "doc": {
+          "lock": true
+        },
+        "info": {
+          "lock": false
         }
       }
     },
@@ -127,7 +95,7 @@
         }
       }
     },
-    "flags:permissions:boolean": {
+    "flags:permissions:detailed": {
       "task": "deno help",
       "cwd": "tests",
       "deno": {
@@ -159,7 +127,7 @@
         }
       }
     },
-    "flags:permissions:array": {
+    "flags:permissions:detailed_more": {
       "task": "deno help",
       "cwd": "tests",
       "deno": {
@@ -176,23 +144,6 @@
         },
         "test": {
           "permissions": {
-            "read": [],
-            "write": [],
-            "net": [],
-            "env": [],
-            "sys": [],
-            "run": [],
-            "ffi": []
-          }
-        }
-      }
-    },
-    "flags:permissions:allow_deny_object": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
-          "permissions": {
             "read": { "allow": ["test"], "deny": ["test"] },
             "write": { "allow": ["test"], "deny": ["test"] },
             "net": { "allow": ["https://example.com"], "deny": ["https://example.com"] },
@@ -202,7 +153,18 @@
             "ffi": { "allow": ["test"], "deny": ["test"] }
           }
         },
-        "test": {
+        "compile": {
+          "permissions": {
+            "read": [],
+            "write": [],
+            "net": [],
+            "env": [],
+            "sys": [],
+            "run": [],
+            "ffi": []
+          }
+        },
+        "install": {
           "permissions": {
             "read": { "allow": [], "deny": [] },
             "write": { "allow": [], "deny": [] },
@@ -215,123 +177,85 @@
         }
       }
     },
-    "flags:modules:boolean": {
+    "flags:modules": {
       "task": "deno help",
       "cwd": "tests",
       "deno": {
         "run": {
           "modules": {
             "cached": true,
-            "remote": true,
-            "npm": true,
+            "remote": false,
+            "npm": false,
             "check": true,
             "reload": true,
             "node_modules": true,
             "vendor": true
           }
         },
+        "bundle": {
+          "modules": {}
+        },
         "test": {
           "modules": {
-            "cached": false,
-            "remote": false,
-            "npm": false,
             "check": false,
-            "reload": false,
-            "node_modules": false,
-            "vendor": false
+            "reload": false
           }
-        }
-      }
-    },
-    "flags:modules:string": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
+        },
+        "compile": {
           "modules": {
-            "check": "all"
-          }
-        }
-      }
-    },
-    "flags:modules:array": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
-          "modules": {
+            "check": "all",
             "reload": ["npm:"]
           }
         },
-        "test": {
+        "vendor": {
           "modules": {
             "reload": []
           }
         }
       }
     },
-    "flags:inspect:string": {
+    "flags:inspect": {
       "task": "deno help",
       "cwd": "tests",
       "deno": {
         "run": {
           "inspect": "127.0.0.1:9229"
-        }
-      }
-    },
-    "flags:inspect:object": {
-      "task": "deno help",
-      "deno": {
-        "run": {
-          "inspect": {
-            "listen": "127.0.0.1:9229",
-            "break": "127.0.0.1:9230",
-            "wait:": "127.0.0.1:9231"
-          }
         },
         "test": {
           "inspect": {
+            "listen": "127.0.0.1:9229",
+            "break": "127.0.0.1:9230",
+            "wait": "127.0.0.1:9231"
           }
+        },
+        "repl": {
+          "inspect": {}
         }
       }
     },
-    "flags:watch:boolean": {
+    "flags:watch": {
       "task": "deno help",
       "cwd": "tests",
       "deno": {
         "run": {
           "watch": true
         },
-        "test": {
+        "bundle": {
           "watch": false
-        }
-      }
-    },
-    "flags:watch:array": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
+        },
+        "test": {
           "watch": ["mod.ts"]
         },
-        "test": {
+        "bench": {
           "watch": []
-        }
-      }
-    },
-    "flags:watch:object": {
-      "task": "deno help",
-      "cwd": "tests",
-      "deno": {
-        "run": {
+        },
+        "fmt": {
           "watch": {
-            "files": ["mod.ts"],
-            "clearScreen": true
+            "files": ["mod.ts"]
           }
         },
-        "test": {
+        "lint": {
           "watch": {
-            "files": [],
             "clearScreen": false
           }
         }

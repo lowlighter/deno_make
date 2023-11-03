@@ -5,9 +5,12 @@
   "+tasks": {
     "flags:none": {
       "task": "deno run mod.ts",
-      "cwd": "tests"
+      "cwd": "tests",
+      "deno": {
+        "run": {}
+      }
     },
-    "flags:string": {
+    "flags:run": {
       "task": "deno run mod.ts",
       "cwd": "tests",
       "deno": {

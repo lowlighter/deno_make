@@ -5,76 +5,25 @@
   "+tasks": {
     "flags:none": {
       "task": "deno fmt mod.ts",
-      "cwd": "tests"
+      "cwd": "tests",
+      "deno": {
+        "fmt": {}
+      }
     },
-    "flags:boolean_true": {
+    "flags:fmt": {
       "task": "deno fmt mod.ts",
       "cwd": "tests",
       "deno": {
         "fmt": {
           "check": true,
-          "tabs": true,
-          "semicolons": true
-        }
-      }
-    },
-    "flags:boolean_false": {
-      "task": "deno fmt mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "fmt": {
-          "check": false,
           "tabs": false,
-          "singleQuote": false,
-          "semicolons": false
-        }
-      }
-    },
-    "flags:single_quote": {
-      "task": "deno fmt mod.ts || true",
-      "cwd": "tests",
-      "deno": {
-        "fmt": {
-          "check": true,
-          "singleQuote": true
-        }
-      }
-    },
-    "flags:string": {
-      "task": "deno fmt mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "fmt": {
-          "proseWrap": "always",
-          "ext": "js"
-        }
-      }
-    },
-    "flags:number": {
-      "task": "deno fmt mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "fmt": {
           "lineWidth": 80,
-          "indentWidth": 2
-        }
-      }
-    },
-    "flags:array": {
-      "task": "deno fmt mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "fmt": {
-          "ignore": ["mod_test.ts"]
-        }
-      }
-    },
-    "flags:array_empty": {
-      "task": "deno fmt mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "fmt": {
-          "ignore": []
+          "indentWidth": 2,
+          "singleQuote": false,
+          "semicolons": false,
+          "proseWrap": "always",
+          "ignore": ["mod_test.ts"],
+          "ext": "js"
         }
       }
     }

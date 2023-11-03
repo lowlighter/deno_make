@@ -175,8 +175,8 @@ const watch = is.union([
   is.boolean().transform((v) => v ? "--watch" : ""),
   is.array(is.string()).transform((v) => v.length ? `--watch='${v.join(",")}'` : ""),
   is.object({
-    files: is.array(is.string()).transform((v) => v.length ? `--watch='${v.join(",")}'` : ""),
-    clearScreen: is.boolean().transform((v) => v === false ? "--no-clear-screen" : ""),
+    files: is.array(is.string()).optional().transform((v) => v?.length ? `--watch='${v.join(",")}'` : ""),
+    clearScreen: is.boolean().optional().transform((v) => v === false ? "--no-clear-screen" : ""),
   }),
 ]).optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" "))
 
@@ -313,7 +313,7 @@ const test = common.merge(runnable).extend({
   doc: is.boolean().optional().transform((v) => v ? "--doc" : ""),
   traceOps: is.boolean().optional().transform((v) => v ? "--trace-ops" : ""),
   run: is.boolean().optional().transform((v) => v === false ? "--no-run" : ""),
-  allowNone: is.boolean().optional().transform((v) => v === true ? "--allow-none" : ""),
+  allowNone: is.boolean().optional().transform((v) => v ? "--allow-none" : ""),
   failFast: is.union([
     is.boolean().transform((v) => v ? "--fail-fast" : ""),
     is.number().transform((v) => `--fail-fast=${v}`),

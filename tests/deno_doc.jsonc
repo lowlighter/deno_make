@@ -5,25 +5,18 @@
   "+tasks": {
     "flags:none": {
       "task": "deno doc mod.ts",
-      "cwd": "tests"
+      "cwd": "tests",
+      "deno": {
+        "doc": {}
+      }
     },
-    "flags:boolean_true": {
+    "flags:doc": {
       "task": "deno doc mod.ts",
       "cwd": "tests",
       "deno": {
         "doc": {
           "private": true,
           "json": true
-        }
-      }
-    },
-    "flags:boolean_false": {
-      "task": "deno doc mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "doc": {
-          "private": false,
-          "json": false
         }
       }
     }

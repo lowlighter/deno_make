@@ -1,1 +1,26 @@
-{}
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno bench",
+      "cwd": "tests",
+      "deno": {
+        "bench": {}
+      }
+    },
+    "flags:bench": {
+      "task": "deno bench",
+      "cwd": "tests",
+      "deno": {
+        "bench": {
+          "json": true,
+          "run": false,
+          "filter": "mod_bench.ts",
+          "ignore": ["mod.ts"]
+        }
+      }
+    }
+  }
+}

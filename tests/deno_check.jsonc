@@ -5,23 +5,17 @@
   "+tasks": {
     "flags:none": {
       "task": "deno check mod.ts",
-      "cwd": "tests"
+      "cwd": "tests",
+      "deno": {
+        "check": {}
+      }
     },
-    "flags:boolean_true": {
+    "flags:check": {
       "task": "deno check mod.ts",
       "cwd": "tests",
       "deno": {
         "check": {
           "all": true
-        }
-      }
-    },
-    "flags:boolean_false": {
-      "task": "deno check mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "check": {
-          "all": false
         }
       }
     }

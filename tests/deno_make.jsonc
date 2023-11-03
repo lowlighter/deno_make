@@ -3,31 +3,33 @@
     "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
   },
   "+tasks": {
-    "make": {
-      "task": "exit 1"
+    "make:empty": {
+      "task": "deno help"
     },
-    "make:description": {
-      "task": "exit 1",
-      "description": "🦕 test"
-    },
-    "make:deno": {
+    "make:task": {
       "task": "deno info",
+      "cwd": "tests",
+      "description": "🦕 test",
       "deno": {
         "info": {
           "quiet": true
         }
-      }
-    },
-    "make:env": {
-      "task": "exit 1",
+      },
       "env": {
         "DINOSAUR": "🦖",
         "TEST_INHERIT": true
       }
     },
-    "make:cwd": {
-      "task": "cwd",
-      "cwd": "tests"
+    "make:multiline": {
+      "task": ["deno help"],
+      "cwd": "tests",
+      "description": ["🦕 test"]
+    },
+    "make:exit": {
+      "task": "exit 1"
+    },
+    "make:rm_deno_make_json": {
+      "task": "rm -r .deno-make.json"
     }
   }
 }

@@ -5,7 +5,10 @@
   "+tasks": {
     "flags:none": {
       "task": "deno vendor mod.ts",
-      "cwd": "tests"
+      "cwd": "tests",
+      "deno": {
+        "vendor": {}
+      }
     },
     "flags:output_1": {
       "task": "deno run mod.ts",
@@ -23,7 +26,7 @@
         "vendor": {
           "output": {
             "path": "vendor",
-            "force:": true
+            "force": true
           }
         }
       }
@@ -34,17 +37,7 @@
       "deno": {
         "vendor": {
           "output": {
-            "force:": false
           }
-        }
-      }
-    },
-    "flags:lock": {
-      "task": "deno run mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "vendor": {
-          "lock": "deno.lock"
         }
       }
     }

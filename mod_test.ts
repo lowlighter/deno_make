@@ -1,6 +1,6 @@
 import { make } from "./mod.ts"
-import { expandGlob } from "https://deno.land/std@0.204.0/fs/mod.ts"
-import * as JSONC from "https://deno.land/std@0.203.0/jsonc/mod.ts"
+import { expandGlob } from "https://deno.land/std@0.205.0/fs/mod.ts"
+import * as JSONC from "https://deno.land/std@0.205.0/jsonc/mod.ts"
 import { expect } from "https://esm.sh/chai@4.3.10?pin=v133"
 
 for await (const { path, name: _name } of expandGlob("tests/*.jsonc")) {
@@ -29,15 +29,32 @@ for await (const { path, name: _name } of expandGlob("tests/*.jsonc")) {
   }
 }
 
-/*Deno.test("deno task make: exit code", async () => {
-  const {code} = await make({task:"make", config:"tests/deno_make.jsonc", log:() => null, exit:true})
-  expect(code).to.equal(1)
-})*/
-
 Deno.test("deno task make: print tasks", async () => {
   const stdio = [] as string[]
   const { code } = await make({ config: "tests/deno_make.jsonc", log: (message) => stdio.push(message), exit: false })
   expect(stdio.join("\n")).to.include("🦕")
+  expect(code).to.equal(0)
+})
+
+Deno.test("deno task make: exit code", async () => {
+  const { exit } = Deno
+  try {
+    let code = 0
+    Object.assign(Deno, { exit: (rc: number) => code = rc })
+    await make({ task: "make:exit", config: "tests/deno_make.jsonc", exit: true, stdio: "null" })
+    expect(code).to.equal(1)
+  } finally {
+    Object.assign(Deno, { exit })
+  }
+})
+
+Deno.test("deno task make: handle removal of .deno-make.json gracefully", async () => {
+  const { code } = await make({
+    task: "make:rm_deno_make_json",
+    config: "tests/deno_make.jsonc",
+    exit: false,
+    stdio: "null",
+  }).catch((error) => error)
   expect(code).to.equal(0)
 })
 

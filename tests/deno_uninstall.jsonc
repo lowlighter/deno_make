@@ -10,7 +10,7 @@
         "uninstall": {}
       }
     },
-    "flags:root": {
+    "flags:uninstall": {
       "task": "deno help",
       "cwd": "tests",
       "deno": {

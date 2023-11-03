@@ -1,1 +1,23 @@
-{}
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno bundle mod.ts",
+      "cwd": "tests",
+      "deno": {
+        "bundle": {}
+      }
+    },
+    "flags:bundle": {
+      "task": "deno bundle mod.ts",
+      "cwd": "tests",
+      "deno": {
+        "bundle": {
+          "ext": "js"
+        }
+      }
+    }
+  }
+}

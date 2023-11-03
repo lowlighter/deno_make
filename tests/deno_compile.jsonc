@@ -5,25 +5,17 @@
   "+tasks": {
     "flags:none": {
       "task": "deno compile mod.ts",
-      "cwd": "tests"
+      "cwd": "tests",
+      "deno": {
+        "compile": {}
+      }
     },
-    "flags:case_1": {
+    "flags:compile": {
       "task": "deno compile mod.ts",
       "cwd": "tests",
       "deno": {
         "compile": {
           "include": ["mod_test.ts"],
-          "output": ".mod.bin",
-          "target": "x86_64-unknown-linux-gnu"
-        }
-      }
-    },
-    "flags:case_2": {
-      "task": "deno compile mod.ts",
-      "cwd": "tests",
-      "deno": {
-        "compile": {
-          "include": [],
           "output": ".mod.bin",
           "target": "x86_64-pc-windows-msvc",
           "terminal": false

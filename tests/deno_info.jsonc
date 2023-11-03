@@ -5,23 +5,17 @@
   "+tasks": {
     "flags:none": {
       "task": "deno info",
-      "cwd": "tests"
+      "cwd": "tests",
+      "deno": {
+        "info": {}
+      }
     },
-    "flags:boolean_true": {
+    "flags:info": {
       "task": "deno info",
       "cwd": "tests",
       "deno": {
         "info": {
           "json": true
-        }
-      }
-    },
-    "flags:boolean_false": {
-      "task": "deno info",
-      "cwd": "tests",
-      "deno": {
-        "info": {
-          "json": false
         }
       }
     }

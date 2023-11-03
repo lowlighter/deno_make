@@ -1,1 +1,24 @@
-{}
+{
+  "tasks": {
+    "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0"
+  },
+  "+tasks": {
+    "flags:none": {
+      "task": "deno eval 'true'",
+      "cwd": "tests",
+      "deno": {
+        "eval": {}
+      }
+    },
+    "flags:eval": {
+      "task": "deno eval 'true'",
+      "cwd": "tests",
+      "deno": {
+        "eval": {
+          "print": true,
+          "ext": "ts"
+        }
+      }
+    }
+  }
+}
