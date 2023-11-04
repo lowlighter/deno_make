@@ -3,6 +3,8 @@
     "make": "deno run --allow-env --allow-read --allow-write=.deno-make.json --allow-run=deno ./mod.ts $0",
     "test": "deno task make test",
     "code": "deno task make code",
+    "check": "deno task make check",
+    "cache": "deno task make cache",
     "ci": "deno task make ci"
   },
   "+tasks": {
@@ -41,14 +43,31 @@
       "description": "🧼 Lint and format code",
       "task": "deno lint && deno fmt"
     },
-    "code:check": {
+    "check": {
       "description": "🫧 Lint and check code fomatting",
-      "task": "deno lint && deno fmt --check"
+      "task": "deno lint && deno fmt",
+      "deno": {
+        "fmt": {
+          "check": true
+        }
+      }
+    },
+    "cache": {
+      "description": "📦 Cache dependencies",
+      "task": "deno cache *.ts",
+      "deno": {
+        "cache": {
+          "modules": {
+            "reload": true,
+            "check": "all"
+          }
+        }
+      }
     },
     "ci": {
       "description": "🤖 CI checks",
       "task": [
-        "deno task make code:check &&",
+        "deno task make check &&",
         "deno task make test"
       ]
     }
