@@ -71,9 +71,7 @@ for convenience.
 }
 ```
 
-<!-- deno-fmt-ignore -->
-> [!NOTE]
-> It is even possible to alias `deno task make <+task>` to `deno task <+task>` !
+> ℹ️ It is even possible to alias `deno task make <+task>` to `deno task <+task>` !
 >
 > ```jsonc
 > // deno.jsonc
@@ -91,9 +89,7 @@ for convenience.
 deno task make <+task>
 ```
 
-<!-- deno-fmt-ignore -->
-> [!NOTE]
-> If _deno_make_ was aliased back to `deno task`, just use the following instead:
+> ℹ️ If _deno_make_ was aliased back to `deno task`, just use the following instead:
 >
 > ```bash
 > deno task start

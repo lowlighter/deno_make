@@ -128,11 +128,11 @@ const _modules = is.object({
   check: is.union([
     is.boolean().transform((v) => v ? "--check=all" : "--no-check"),
     is.string().min(1).transform((v) => `--check=${v}`),
-  ]).optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
+  ]).optional(),
   reload: is.union([
     is.boolean().transform((v) => v ? "--reload" : ""),
     is.array(is.string()).transform((v) => v.length ? `--reload=${v.join(",")}` : ""),
-  ]).optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
+  ]).optional(),
   node_modules: is.boolean().optional().transform((v) => typeof v === "boolean" ? `--node-modules-dir=${v}` : ""),
   vendor: is.boolean().optional().transform((v) => typeof v === "boolean" ? `--vendor=${v}` : ""),
 })
@@ -174,8 +174,8 @@ const inspect = is.union([
     listen: is.string().min(1).optional().transform((v) => v ? `--inspect='${v}'` : ""),
     break: is.string().min(1).optional().transform((v) => v ? `--inspect-brk='${v}'` : ""),
     wait: is.string().min(1).optional().transform((v) => v ? `--inspect-wait='${v}'` : ""),
-  }),
-]).optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" "))
+  }).transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
+]).optional()
 
 /** Watch flags */
 const watch = is.union([
@@ -184,8 +184,8 @@ const watch = is.union([
   is.object({
     files: is.array(is.string()).optional().transform((v) => v?.length ? `--watch='${v.join(",")}'` : ""),
     clearScreen: is.boolean().optional().transform((v) => v === false ? "--no-clear-screen" : ""),
-  }),
-]).optional().transform((v) => Object.values(v ?? {}).filter(Boolean).join(" "))
+  }).transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
+]).optional()
 
 // Deno flags =========================================================================================================
 
