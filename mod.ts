@@ -10,7 +10,7 @@ import { bgBrightBlue, bold, gray, italic, underline, yellow } from "https://den
 const common = is.object({
   unstable: is.union([
     is.boolean().transform((v) => v ? "--unstable" : ""),
-    is.array(is.string()).transform((v) => v.length ? v.map((w) => `--unstable-${w}`) : ""),
+    is.array(is.string()).transform((v) => v.length ? v.map((w) => `--unstable-${w}`).join(" ") : ""),
   ]).optional(),
   quiet: is.boolean().optional().transform((v) => v ? "--quiet" : ""),
   config: is.union([
