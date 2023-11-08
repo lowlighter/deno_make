@@ -183,7 +183,7 @@ const inspect = is.union([
     listen: is.string().min(1).optional().transform((v) => v ? `--inspect='${v}'` : ""),
     break: is.string().min(1).optional().transform((v) => v ? `--inspect-brk='${v}'` : ""),
     wait: is.string().min(1).optional().transform((v) => v ? `--inspect-wait='${v}'` : ""),
-  }).transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
+  }).transform((v) => Object.values(v).filter(Boolean).join(" ")),
 ]).optional()
 
 /** Watch flags */
@@ -193,7 +193,7 @@ const watch = is.union([
   is.object({
     files: is.array(is.string()).optional().transform((v) => v?.length ? `--watch='${v.join(",")}'` : ""),
     clearScreen: is.boolean().optional().transform((v) => v === false ? "--no-clear-screen" : ""),
-  }).transform((v) => Object.values(v ?? {}).filter(Boolean).join(" ")),
+  }).transform((v) => Object.values(v).filter(Boolean).join(" ")),
 ]).optional()
 
 // Deno flags =========================================================================================================
@@ -387,12 +387,21 @@ const _make = is.object({
     )
   ).default(() => ({})),
   cwd: is.string().optional(),
+  args: is.array(
+    is.object({
+      alias: is.string(),
+      default: is.unknown().optional(),
+      required: is.boolean().default(false),
+      description: is.string().default(""),
+    }).refine((value) => !(("default" in value) && (value.required)), {
+      message: "Cannot have default when value is required",
+    }),
+  ).default(() => []),
   flags: is.record(
     is.string(),
     is.object({
       alias: is.string().optional(),
       default: is.unknown().optional(),
-      required: is.boolean().default(false),
       description: is.string().default(""),
     }),
   ).default(() => ({})),
@@ -421,7 +430,7 @@ const _make = is.object({
 /** Compute command to execute after applying deno flags */
 export function command(
   raw: string,
-  { flags, deno, argv = [] }: Pick<is.infer<typeof _make>, "deno" | "flags"> & { argv?: string[] },
+  { flags, args, deno, argv = [] }: Pick<is.infer<typeof _make>, "deno" | "flags" | "args"> & { argv?: string[] },
   { colors = false, parseArgv = true } = {},
 ) {
   for (const [subcommand, options] of Object.entries(deno)) {
@@ -430,7 +439,7 @@ export function command(
       `deno ${subcommand} ${colors ? italic(underline(options)) : options}`,
     )
   }
-  const { _: args, ...options } = parse(argv, {
+  const { _, ...options } = parse(argv, {
     alias: Object.fromEntries(
       Object.entries(flags).filter(([_, { alias }]) => alias).map(([key, { alias }]) => [alias, key]),
     ),
@@ -440,21 +449,29 @@ export function command(
       ) => [key, options.default]),
     ),
   })
-  for (const [key, { required }] of Object.entries(flags)) {
-    if (parseArgv && required && (!(key in options))) {
-      throw new ReferenceError(`Missing flag: ${key}`)
-    }
+  for (let i = 0; i < args.length; i++) {
+    const { alias, required, default: defaults } = args[i]
     if (parseArgv) {
-      raw = raw.replaceAll(`$<${key}>`, `${options[key]}`)
-    } else if (colors) {
-      raw = raw.replaceAll(`$<${key}>`, italic(underline(`$<${key}>`)))
+      if (required && (!(i in argv))) {
+        throw new ReferenceError(`Missing argument: ${alias}`)
+      }
+      raw = raw.replaceAll(`$<${alias}>`, `${argv[i] ?? defaults}`)
+      continue
+    }
+    if (colors) {
+      raw = raw
+        .replaceAll(`$<${alias}>`, italic(underline(`$<${alias}>`)))
+        .replaceAll(`$<${i}>`, italic(underline(`$<${alias}>`)))
     }
   }
-  for (let key = 0; key < args.length; key++) {
+  for (const alias of Object.keys(flags)) {
     if (parseArgv) {
-      raw = raw.replaceAll(`$<${key}>`, `${args[key]}`)
-    } else if (colors) {
-      raw = raw.replaceAll(`$<${key}>`, italic(underline(`$<${key}>`)))
+      raw = raw.replaceAll(`$<${alias}>`, `${options[alias]}`)
+      continue
+    }
+    if (colors) {
+      raw = raw
+        .replaceAll(`$<${alias}>`, italic(underline(`$<${alias}>`)))
     }
   }
   return raw
@@ -486,11 +503,11 @@ export async function make(
     }),
   )
   if (task) {
-    const { task: raw, env, deno, flags, cwd } = tasks[task]
+    const { task: raw, env, deno, flags, args, cwd } = tasks[task]
     const temp = ".deno-make.json"
     const decoder = new TextDecoder()
     try {
-      const make = command(raw, { deno, flags, argv })
+      const make = command(raw, { deno, flags, args, argv })
       await Deno.writeTextFile(temp, JSON.stringify({ tasks: { make } }))
       const process = new Deno.Command("deno", {
         args: ["task", ...(cwd ? ["--cwd", cwd] : []), "--config", temp, "make"],
@@ -516,7 +533,7 @@ export async function make(
     }
   } else if (Object.keys(tasks).length) {
     for (
-      const [name, { task, description, env, cwd, deno, flags }] of Object.entries(
+      const [name, { task, description, env, cwd, deno, flags, args }] of Object.entries(
         tasks,
       )
     ) {
@@ -531,22 +548,36 @@ export async function make(
           log(
             gray(
               `  ${k}=${v}${inherited ? underline(italic("→ inherited")) : ""}`
-                .trim(),
+                .trimEnd(),
             ),
+          )
+        }
+      }
+      if (args.length) {
+        log(magenta(`Arguments:`))
+        for (const { alias, required, description, ...options } of args) {
+          log(
+            `  ${
+              magenta(
+                `${required ? `<${alias}>` : `[${alias}${"default" in options ? `=${options.default}` : ""}]`}`.padEnd(
+                  24,
+                ),
+              )
+            }${description}`,
           )
         }
       }
       if (Object.keys(flags).length) {
         log(magenta(`Flags:`))
-        for (const [key, { alias, required, description, ...options }] of Object.entries(flags)) {
+        for (const [key, { alias, description, ...options }] of Object.entries(flags)) {
           log(
-            `${
+            `  ${
               magenta(
-                `  --${key}${alias ? `, -${alias}` : ""}${
-                  "default" in options ? italic(` [=${options.default}]`) : required ? italic(bold(` (required)`)) : ""
-                }`,
+                `${alias ? `-${alias},` : "   "} --${key}${"default" in options ? `[=${options.default}]` : ""}`.padEnd(
+                  24,
+                ),
               )
-            }\t${description}`,
+            }${description}`,
           )
         }
       }
@@ -555,7 +586,7 @@ export async function make(
         log(gray(`  ${cwd}`))
       }
       log(gray(`Task:`))
-      log(gray(`  ${command(task, { deno, flags }, { colors: true, parseArgv: false })}`))
+      log(gray(`  ${command(task, { deno, args, flags }, { colors: true, parseArgv: false })}`))
       log("")
     }
     return { code: 0 }

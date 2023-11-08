@@ -1,7 +1,9 @@
 import { make } from "./mod.ts"
 import { expandGlob } from "https://deno.land/std@0.205.0/fs/mod.ts"
 import * as JSONC from "https://deno.land/std@0.205.0/jsonc/mod.ts"
-import { expect } from "https://esm.sh/chai@4.3.10?pin=v133"
+import chai from "https://esm.sh/chai@4.3.10?pin=v133"
+import chaiAsPromised from "https://esm.sh/chai-as-promised@7.1.1?pin=v133"
+const { expect } = chai.use(chaiAsPromised)
 
 for await (const { path, name: _name } of expandGlob("tests/*.jsonc")) {
   const name = _name.replace(".jsonc", "").replaceAll("_", " ")
@@ -36,51 +38,36 @@ Deno.test("deno task make: print tasks", async () => {
   expect(code).to.equal(0)
 })
 
-Deno.test("deno task make: flags required", async () => {
+Deno.test("deno task make: args", async () => {
   const stdio = [] as string[]
   const { code } = await make({
-    task: "make:flags_required",
-    argv: ["--foo", "🦕"],
-    config: "tests/deno_make.jsonc",
-    log: (message) => stdio.push(message),
-    stdio: "piped",
-    exit: false,
-  })
-  expect(stdio.join("\n")).to.include("🦕")
-  expect(code).to.equal(0)
-})
-
-Deno.test.ignore("deno task make: flags required throw", async () => {
-  await expect(() =>
-    make({ task: "make:flags_required", argv: [], config: "tests/deno_make.jsonc", stdio: "null", exit: false })
-  ).to
-})
-
-Deno.test("deno task make: flags defaults", async () => {
-  const stdio = [] as string[]
-  const { code } = await make({
-    task: "make:flags_defaults",
-    argv: [],
-    config: "tests/deno_make.jsonc",
-    log: (message) => stdio.push(message),
-    stdio: "piped",
-    exit: false,
-  })
-  expect(stdio.join("\n")).to.include("🦕")
-  expect(code).to.equal(0)
-})
-
-Deno.test("deno task make: flags positional", async () => {
-  const stdio = [] as string[]
-  const { code } = await make({
-    task: "make:flags_positional",
+    task: "make:args",
     argv: ["🦕"],
     config: "tests/deno_make.jsonc",
     log: (message) => stdio.push(message),
     stdio: "piped",
     exit: false,
   })
-  expect(stdio.join("\n")).to.include("🦕")
+  expect(stdio.join("\n")).to.include("🦕").and.to.include("🦖")
+  expect(code).to.equal(0)
+})
+
+Deno.test("deno task make: missing args required throw", async () => {
+  await expect(make({ task: "make:args", argv: [], config: "tests/deno_make.jsonc", stdio: "null", exit: false })).to.be
+    .rejectedWith(Error, /missing argument/i)
+})
+
+Deno.test("deno task make: flags", async () => {
+  const stdio = [] as string[]
+  const { code } = await make({
+    task: "make:flags",
+    argv: ["--foo", "🦕"],
+    config: "tests/deno_make.jsonc",
+    log: (message) => stdio.push(message),
+    stdio: "piped",
+    exit: false,
+  })
+  expect(stdio.join("\n")).to.include("🦕").and.to.include("🦖")
   expect(code).to.equal(0)
 })
 

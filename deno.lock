@@ -13,6 +13,7 @@
   },
   "redirects": {
     "https://esm.sh/v132/@types/chai@~4.3/index.d.ts": "https://esm.sh/v132/@types/chai@4.3.8/index.d.ts",
+    "https://esm.sh/v133/@types/chai-as-promised@~7.1/index.d.ts": "https://esm.sh/v133/@types/chai-as-promised@7.1.8/index.d.ts",
     "https://esm.sh/v133/@types/chai@~4.3/index.d.ts": "https://esm.sh/v133/@types/chai@4.3.9/index.d.ts"
   },
   "remote": {
@@ -277,6 +278,7 @@
     "https://deno.land/x/zod@v3.21.4/locales/en.ts": "a7a25cd23563ccb5e0eed214d9b31846305ddbcdb9c5c8f508b108943366ab4c",
     "https://deno.land/x/zod@v3.21.4/mod.ts": "64e55237cb4410e17d968cd08975566059f27638ebb0b86048031b987ba251c4",
     "https://deno.land/x/zod@v3.21.4/types.ts": "b5d061babea250de14fc63764df5b3afa24f2b088a1d797fc060ba49a0ddff28",
+    "https://esm.sh/chai-as-promised@7.1.1?pin=v133": "c94bdef9e8697e6cca465af6ec3437cea7cf53e44ae62e8a869f976d0ab3f2c7",
     "https://esm.sh/chai@4.3.10": "e413ea40e1248a0a06e8812f22ec265c4a41cb57829c19017af5cb1def62880f",
     "https://esm.sh/chai@4.3.10?pin=v133": "e25839044ba92464bd0194939276cc97cbdec7f42ad2c49609d0092eaac1c8e1",
     "https://esm.sh/string-argv@0.3.2": "ba1d5479e1ed6293e5a7ffd3297e0eb55a23a5d5d7ac71306ee829fba4243402",
@@ -291,6 +293,7 @@
     "https://esm.sh/v132/string-argv@0.3.2/denonext/string-argv.mjs": "a7977920da1d72bf89b1db36d2c24fdfa82df6ce4f6c2b59a930b641a6ba9b37",
     "https://esm.sh/v132/type-detect@4.0.8/denonext/type-detect.mjs": "deb58bd7203992249a5795f7da35d00b67077fe6c03019349cb614ba22ef52ad",
     "https://esm.sh/v133/assertion-error@1.1.0/denonext/assertion-error.mjs": "0a4a5dccfb89070dd1e09fad036e706aa51d9dd3236ab019aed08bef1841695b",
+    "https://esm.sh/v133/chai-as-promised@7.1.1/denonext/chai-as-promised.mjs": "bbcd90c4502fe553f17aa1923cb07c22cb2302c1da1d50a046796ab71b9f7f2e",
     "https://esm.sh/v133/chai@4.3.10/denonext/chai.mjs": "fa4ea11c224f9f3abc5272c8917c0c629ec5ae2bec2fafe4edee09dfddcc4f68",
     "https://esm.sh/v133/check-error@1.0.3/denonext/check-error.mjs": "04b0b4e7d4470a991f1211e35075d68ad3d96602236853f615527af0e889a265",
     "https://esm.sh/v133/deep-eql@4.1.3/denonext/deep-eql.mjs": "3f406af09e31cfb3d403689e277eb392ee18361ca682c26a3955db094ba94802",

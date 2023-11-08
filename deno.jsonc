@@ -66,17 +66,36 @@
     },
     "demo:flags": {
       "description": "🎬 Demo: flags",
-      "task": "echo '$<foo> $<bar>'",
+      "task": [
+        "echo '0: $<0>' &&",
+        "echo '1: $<1>' &&",
+        "echo 'foo: $<foo>' &&",
+        "echo 'bar: $<bar>'"
+      ],
+      "args": [
+        {
+          "alias": "0",
+          "required": true,
+          "description": "Example of required argument"
+        },
+        {
+          "alias": "1",
+          "default": true,
+          "description": "Example of optional argument"
+        }
+      ],
       "flags": {
         "foo": {
           "alias": "f",
-          "required": true,
-          "description": "Example of a required flag"
+          "description": "Example of a standard flag"
         },
         "bar": {
           "alias": "b",
           "default": "bar",
-          "description": "Example of a standard flag"
+          "description": "Example of a defaulted flag"
+        },
+        "baz": {
+          "description": "Example of a non-aliased flag"
         }
       }
     },

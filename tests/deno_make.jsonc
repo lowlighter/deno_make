@@ -20,31 +20,32 @@
         "TEST_INHERIT": true
       }
     },
-    "make:flags_required": {
-      "task": "echo '$<foo>'",
+    "make:args": {
+      "task": "echo '$<foo> / $<bar>'",
       "cwd": "tests",
-      "flags": {
-        "foo": {
-          "alias": "f",
+      "args": [
+        {
+          "alias": "foo",
           "required": true
+        },
+        {
+          "alias": "bar",
+          "default": "🦖"
+        },
+        {
+          "alias": "baz"
         }
-      }
+      ]
     },
-    "make:flags_defaults": {
-      "task": "echo '$<foo>'",
+    "make:flags": {
+      "task": "echo '$<foo> / $<bar>'",
       "cwd": "tests",
       "flags": {
         "foo": {
-          "default": "🦕"
-        }
-      }
-    },
-    "make:flags_positional": {
-      "task": "echo '$<0>'",
-      "cwd": "tests",
-      "flags": {
-        "unused": {
-          "description": "This flag is unused"
+        },
+        "bar": {
+          "alias": "b",
+          "default": "🦖"
         }
       }
     },
