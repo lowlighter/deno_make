@@ -2,7 +2,16 @@
 import * as JSONC from "https://deno.land/std@0.205.0/jsonc/mod.ts"
 import { z as is } from "https://deno.land/x/zod@v3.21.4/mod.ts"
 import { fromZodError } from "https://esm.sh/zod-validation-error@1.5.0?pin=v133"
-import { bgBrightBlue, bold, gray, italic, underline, yellow } from "https://deno.land/std@0.205.0/fmt/colors.ts"
+import {
+  bgBrightBlue,
+  bold,
+  gray,
+  italic,
+  magenta,
+  underline,
+  yellow,
+} from "https://deno.land/std@0.205.0/fmt/colors.ts"
+import { parse } from "https://deno.land/std@0.205.0/flags/mod.ts"
 
 // Structure flags =========================================================================================================
 
@@ -378,6 +387,15 @@ const _make = is.object({
     )
   ).default(() => ({})),
   cwd: is.string().optional(),
+  flags: is.record(
+    is.string(),
+    is.object({
+      alias: is.string().optional(),
+      default: is.unknown().optional(),
+      required: is.boolean().default(false),
+      description: is.string().default(""),
+    }),
+  ).default(() => ({})),
   deno: is.object({
     bench,
     bundle,
@@ -403,14 +421,41 @@ const _make = is.object({
 /** Compute command to execute after applying deno flags */
 export function command(
   raw: string,
-  { deno }: Pick<is.infer<typeof _make>, "deno">,
-  { colors = false } = {},
+  { flags, deno, argv = [] }: Pick<is.infer<typeof _make>, "deno" | "flags"> & { argv?: string[] },
+  { colors = false, parseArgv = true } = {},
 ) {
-  for (const [subcommand, flags] of Object.entries(deno)) {
+  for (const [subcommand, options] of Object.entries(deno)) {
     raw = raw.replaceAll(
       `deno ${subcommand}`,
-      `deno ${subcommand} ${colors ? italic(underline(flags)) : flags}`,
+      `deno ${subcommand} ${colors ? italic(underline(options)) : options}`,
     )
+  }
+  const { _: args, ...options } = parse(argv, {
+    alias: Object.fromEntries(
+      Object.entries(flags).filter(([_, { alias }]) => alias).map(([key, { alias }]) => [alias, key]),
+    ),
+    default: Object.fromEntries(
+      Object.entries(flags).filter(([_, options]) => "default" in options).map((
+        [key, options],
+      ) => [key, options.default]),
+    ),
+  })
+  for (const [key, { required }] of Object.entries(flags)) {
+    if (parseArgv && required && (!(key in options))) {
+      throw new ReferenceError(`Missing flag: ${key}`)
+    }
+    if (parseArgv) {
+      raw = raw.replaceAll(`$<${key}>`, `${options[key]}`)
+    } else if (colors) {
+      raw = raw.replaceAll(`$<${key}>`, italic(underline(`$<${key}>`)))
+    }
+  }
+  for (let key = 0; key < args.length; key++) {
+    if (parseArgv) {
+      raw = raw.replaceAll(`$<${key}>`, `${args[key]}`)
+    } else if (colors) {
+      raw = raw.replaceAll(`$<${key}>`, italic(underline(`$<${key}>`)))
+    }
   }
   return raw
 }
@@ -419,6 +464,7 @@ export function command(
 export async function make(
   {
     task = "",
+    argv = [] as string[],
     config = "deno.jsonc",
     log = console.log,
     exit = true,
@@ -440,11 +486,11 @@ export async function make(
     }),
   )
   if (task) {
-    const { task: raw, env, deno, cwd } = tasks[task]
+    const { task: raw, env, deno, flags, cwd } = tasks[task]
     const temp = ".deno-make.json"
     const decoder = new TextDecoder()
     try {
-      const make = command(raw, { deno })
+      const make = command(raw, { deno, flags, argv })
       await Deno.writeTextFile(temp, JSON.stringify({ tasks: { make } }))
       const process = new Deno.Command("deno", {
         args: ["task", ...(cwd ? ["--cwd", cwd] : []), "--config", temp, "make"],
@@ -470,7 +516,7 @@ export async function make(
     }
   } else if (Object.keys(tasks).length) {
     for (
-      const [name, { task, description, env, cwd, deno }] of Object.entries(
+      const [name, { task, description, env, cwd, deno, flags }] of Object.entries(
         tasks,
       )
     ) {
@@ -490,12 +536,26 @@ export async function make(
           )
         }
       }
+      if (Object.keys(flags).length) {
+        log(magenta(`Flags:`))
+        for (const [key, { alias, required, description, ...options }] of Object.entries(flags)) {
+          log(
+            `${
+              magenta(
+                `  --${key}${alias ? `, -${alias}` : ""}${
+                  "default" in options ? italic(` [=${options.default}]`) : required ? italic(bold(` (required)`)) : ""
+                }`,
+              )
+            }\t${description}`,
+          )
+        }
+      }
       if (cwd) {
         log(gray(`Working directory:`))
         log(gray(`  ${cwd}`))
       }
       log(gray(`Task:`))
-      log(gray(`  ${command(task, { deno }, { colors: true })}`))
+      log(gray(`  ${command(task, { deno, flags }, { colors: true, parseArgv: false })}`))
       log("")
     }
     return { code: 0 }
@@ -505,5 +565,6 @@ export async function make(
 }
 
 if (import.meta.main) {
-  await make({ task: Deno.args[0] })
+  const [task, ...argv] = Deno.args
+  await make({ task, argv })
 }

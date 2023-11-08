@@ -64,6 +64,22 @@
         }
       }
     },
+    "demo:flags": {
+      "description": "🎬 Demo: flags",
+      "task": "echo '$<foo> $<bar>'",
+      "flags": {
+        "foo": {
+          "alias": "f",
+          "required": true,
+          "description": "Example of a required flag"
+        },
+        "bar": {
+          "alias": "b",
+          "default": "bar",
+          "description": "Example of a standard flag"
+        }
+      }
+    },
     "ci": {
       "description": "🤖 CI checks",
       "task": [

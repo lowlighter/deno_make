@@ -20,6 +20,34 @@
         "TEST_INHERIT": true
       }
     },
+    "make:flags_required": {
+      "task": "echo '$<foo>'",
+      "cwd": "tests",
+      "flags": {
+        "foo": {
+          "alias": "f",
+          "required": true
+        }
+      }
+    },
+    "make:flags_defaults": {
+      "task": "echo '$<foo>'",
+      "cwd": "tests",
+      "flags": {
+        "foo": {
+          "default": "🦕"
+        }
+      }
+    },
+    "make:flags_positional": {
+      "task": "echo '$<0>'",
+      "cwd": "tests",
+      "flags": {
+        "unused": {
+          "description": "This flag is unused"
+        }
+      }
+    },
     "make:multiline": {
       "task": ["deno help"],
       "cwd": "tests",
