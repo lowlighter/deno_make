@@ -37,6 +37,10 @@
         }
       ]
     },
+    "make:args_pass_all": {
+      "task": "echo '$<*>'",
+      "cwd": "tests"
+    },
     "make:flags": {
       "task": "echo '$<foo> / $<bar>'",
       "cwd": "tests",

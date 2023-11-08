@@ -449,6 +449,11 @@ export function command(
       ) => [key, options.default]),
     ),
   })
+  if (parseArgv) {
+    raw = raw.replaceAll("$<*>", argv.join(" "))
+  } else if (colors) {
+    raw = raw.replaceAll("$<*>", italic(underline("$<*>")))
+  }
   for (let i = 0; i < args.length; i++) {
     const { alias, required, default: defaults } = args[i]
     if (parseArgv) {

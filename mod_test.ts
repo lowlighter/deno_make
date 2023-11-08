@@ -57,6 +57,20 @@ Deno.test("deno task make: missing args required throw", async () => {
     .rejectedWith(Error, /missing argument/i)
 })
 
+Deno.test("deno task make: pass all arguments", async () => {
+  const stdio = [] as string[]
+  const { code } = await make({
+    task: "make:args_pass_all",
+    argv: ["--foo", "🦕", "🦖"],
+    config: "tests/deno_make.jsonc",
+    log: (message) => stdio.push(message),
+    stdio: "piped",
+    exit: false,
+  })
+  expect(stdio.join("\n")).to.include("--foo").to.include("🦕").and.to.include("🦖")
+  expect(code).to.equal(0)
+})
+
 Deno.test("deno task make: flags", async () => {
   const stdio = [] as string[]
   const { code } = await make({
