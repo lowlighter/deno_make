@@ -2,3 +2,4 @@
 .deno-make.json
 tests/.*
 tests/tests.exe
+tests/tests
