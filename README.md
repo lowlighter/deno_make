@@ -11,6 +11,7 @@ features to the [deno](https://deno.land) task runner.
 - Write long tasks using arrays to improve readability
 - Add descriptions to your tasks
 - List and preview available tasks
+- Replace positional and arguments easily
 
 ![Advanced task configuration](/demo/config.png)
 
